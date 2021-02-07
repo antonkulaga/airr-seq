@@ -1,0 +1,5 @@
+install.packages(c("alakazam", "ape", "CollessLike", "data.table", "dplyr", "entropy", "HDMD", "jsonlite", "magrittr", "Peptides", "RecordLinkage", "shazam", "seqinr", "stringdist", "stringr", "testthat", "textmineR", "yaml"))
+source("https://bioconductor.org/biocLite.R")
+BiocManager::install(c("Biostrings"))
+library(devtools)
+devtools::load_all("/opt/sumrep/")
