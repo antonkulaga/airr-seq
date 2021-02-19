@@ -1,12 +1,13 @@
 FROM immcantation/suite:devel
 
 ENV CRAN_URL https://cloud.r-project.org/
-ENV DISABLE_AUTH=true
+#ENV DISABLE_AUTH=true
+ENV PASSWORD=rstudio
 
-#ADD https://s3.amazonaws.com/rstudio-server/current.ver /tmp/ver
+ADD https://s3.amazonaws.com/rstudio-server/current.ver /tmp/ver
 
 RUN yum install rstudio-server -y
-#USER rstudio
+USER rstudio
 WORKDIR /home/rstudio
 
 EXPOSE 8787
