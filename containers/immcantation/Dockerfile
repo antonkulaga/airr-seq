@@ -11,5 +11,5 @@ WORKDIR /home/rstudio
 
 EXPOSE 8787
 
-ENTRYPOINT ["/usr/bin/rserver"]
-CMD ["--server-daemonize=0", "--server-app-armor-enabled=0"]
+#ENTRYPOINT ["/usr/bin/rserver"]
+CMD "/usr/bin/rserver --server-daemonize=0 --server-app-armor-enabled=0"
