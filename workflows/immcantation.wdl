@@ -1,5 +1,7 @@
 version development
 
+import "https://raw.githubusercontent.com/antonkulaga/bioworkflows/main/workflows/extract_run.wdl" as extractor
+
 workflow immcantation {
     input {
         File sequence #fasta or fastq
@@ -10,6 +12,7 @@ workflow immcantation {
         Boolean only_functional = false
         Boolean partial_alignments = false
         String format = "airr"
+        String destination
 
     }
 
@@ -23,11 +26,22 @@ workflow immcantation {
             format = format
     }
 
+    call extractor.copy as copy_changeo_igblast {
+        input:
+            files = [changeo_igblast.out], destination = destination + "/" + "changeo_igblast"
+    }
+
     call shazam_threshold {
         input:
             airr_tsv = changeo_igblast.airr_tsv,
             name = name
     }
+
+    call extractor.copy as copy_changeo {
+        input:
+            files = [changeo_igblast.out], destination = destination + "/" + "changeo"
+    }
+
 
     call changeo_clone {
         input:
@@ -35,6 +49,23 @@ workflow immcantation {
             name = name,
             threshold_tsv = shazam_threshold.threshold_tsv
     }
+
+    call extractor.copy as copy_changeo_clone {
+        input:
+            files = [changeo_clone.out], destination = destination + "/" + "changeo_clone"
+    }
+
+    call tigger_genotype {
+        input:
+         airr_tsv = changeo_igblast.airr_tsv,
+         name = name
+    }
+
+    call extractor.copy as copy_tigger {
+        input:
+            files = [tigger_genotype.out], destination = destination + "/" + "tigger"
+    }
+
 
 }
 

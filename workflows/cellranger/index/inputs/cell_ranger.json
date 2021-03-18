@@ -1,0 +1,6 @@
+{
+  "cell_ranger_index.index_name": "Homo_sapiens_ens_103",
+  "cell_ranger_index.gtf": "/data/ensembl/103/species/Homo_sapiens/Homo_sapiens.GRCh38.103.gtf",
+  "cell_ranger_index.fasta": "/data/ensembl/103/species/Homo_sapiens/Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa",
+  "cell_ranger_index.destination": "/data/indexes/cellranger"
+}

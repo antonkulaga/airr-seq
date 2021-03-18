@@ -1,0 +1,8 @@
+{
+  "cellranger.name": "ERR3276430",
+  "cellranger.fastq_folder": "/data/samples/AIRR-Seq/ERR3276430/fastq",
+  "cellranger.prefix": "ERR3276430",
+  "cellranger.transcriptome": "/data/indexes/cellranger/Homo_sapiens_ens_103",
+  "cellranger.threads": 12,
+  "cellranger.destination": "/data/samples/AIRR-Seq/ERR3276430"
+}
