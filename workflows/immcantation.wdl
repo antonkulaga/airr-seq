@@ -64,6 +64,11 @@ workflow immcantation {
 
     }
 
+    output {
+        Array[File] changeo = copy_changeo_igblast.out
+        Array[File] clones = select_first([copy_changeo_clone.out])
+    }
+
 
 }
 
