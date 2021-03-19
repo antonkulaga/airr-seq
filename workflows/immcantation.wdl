@@ -31,39 +31,37 @@ workflow immcantation {
             files = [changeo_igblast.out], destination = destination + "/" + "changeo_igblast"
     }
 
-    call shazam_threshold {
-        input:
-            airr_tsv = changeo_igblast.airr_tsv,
-            name = name
-    }
+    if ( defined(changeo_igblast.airr_tsv)){
+        File airr_tsv = select_first([changeo_igblast.airr_tsv])
+         call shazam_threshold {
+            input:
+                airr_tsv = airr_tsv,
+                name = name
+        }
 
-    call extractor.copy as copy_changeo {
-        input:
-            files = [changeo_igblast.out], destination = destination + "/" + "changeo"
-    }
+        call tigger_genotype {
+            input:
+                airr_tsv = airr_tsv,
+                name = name
+        }
 
+        call extractor.copy as copy_tigger {
+            input:
+                files = [tigger_genotype.out], destination = destination + "/" + "tigger"
+        }
 
-    call changeo_clone {
-        input:
-            airr_tsv = changeo_igblast.airr_tsv,
-            name = name,
-            threshold_tsv = shazam_threshold.threshold_tsv
-    }
+        call changeo_clone {
+            input:
+                airr_tsv = airr_tsv,
+                name = name,
+                threshold_tsv = shazam_threshold.threshold_tsv
+        }
 
-    call extractor.copy as copy_changeo_clone {
-        input:
-            files = [changeo_clone.out], destination = destination + "/" + "changeo_clone"
-    }
+        call extractor.copy as copy_changeo_clone {
+            input:
+                files = [changeo_clone.out], destination = destination + "/" + "changeo_clone"
+        }
 
-    call tigger_genotype {
-        input:
-         airr_tsv = changeo_igblast.airr_tsv,
-         name = name
-    }
-
-    call extractor.copy as copy_tigger {
-        input:
-            files = [tigger_genotype.out], destination = destination + "/" + "tigger"
     }
 
 
@@ -111,8 +109,8 @@ task changeo_igblast {
 
     output {
         File out = prefix
-        File airr_tsv = prefix + "/" + prefix+"_db-pass.tsv"
-        File fmt7 = prefix + "/" + prefix+"_igblast.fmt7"
+        File? airr_tsv = prefix + "/" + prefix+"_db-pass.tsv"
+        File? fmt7 = prefix + "/" + prefix+"_igblast.fmt7"
     }
 }
 
