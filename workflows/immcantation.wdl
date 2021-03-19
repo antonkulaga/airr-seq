@@ -11,6 +11,7 @@ workflow immcantation {
         Boolean ig = true
         Boolean only_functional = false
         Boolean partial_alignments = false
+        Boolean include_tigger = false
         String format = "airr"
         String destination
 
@@ -31,7 +32,7 @@ workflow immcantation {
             files = [changeo_igblast.out], destination = destination + "/" + "changeo_igblast"
     }
 
-    if ( defined(changeo_igblast.airr_tsv)){
+    if (include_tigger && defined(changeo_igblast.airr_tsv)){
         File airr_tsv = select_first([changeo_igblast.airr_tsv])
          call shazam_threshold {
             input:
