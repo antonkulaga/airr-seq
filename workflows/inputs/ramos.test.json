@@ -7,7 +7,9 @@
     "/data/sources/ramos/data/RAGE-Seq/control_contigs/ramos.1023_contigs_nanopolish.1023.fa"
   ],
   "immune_analysis.format": "airr",
-  "immune_analysis.destination": "/data/samples/AIRR-Seq/ramos/test",
+  "immune_analysis.destination": "/data/samples/AIRR-Seq/ramos/test_merged",
   "immune_analysis.threads": 6,
-  "immune_analysis.only_functional": false
+  "immune_analysis.only_functional": false,
+  "immune_analysis.merge_files": true,
+  "immune_analysis.include_tigger": true
 }

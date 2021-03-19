@@ -13,7 +13,7 @@ workflow immune_analysis{
         String format = "airr"
         String destination
         Boolean merge_files
-        Boolean tigger = true
+        Boolean include_tigger = true
     }
 
     if(merge_files) {
@@ -27,7 +27,7 @@ workflow immune_analysis{
                 partial_alignments = partial_alignments,
                 format = format,
                 destination = "/" + "immcantation",
-                tigger = true
+                  include_tigger = include_tigger
        }
     }
     if(!merge_files) {
@@ -44,7 +44,7 @@ workflow immune_analysis{
                     partial_alignments = partial_alignments,
                     format = format,
                     destination = "/" + "immcantation",
-                    tigger = false
+                    include_tigger = include_tigger
             }
         }
     }
