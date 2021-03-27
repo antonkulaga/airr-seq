@@ -18,7 +18,7 @@ workflow basic_immcantation {
 task igblast {
     input {
         File fasta
-            Int threads
+        Int threads
     }
     command {
         mkdir -p igblast

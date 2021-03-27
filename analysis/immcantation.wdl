@@ -1,6 +1,7 @@
 version development
 
-import "https://raw.githubusercontent.com/antonkulaga/bioworkflows/main/workflows/extract_run.wdl" as extractor
+
+import "https://raw.githubusercontent.com/antonkulaga/bioworkflows/main/common/files.wdl" as files
 
 workflow immcantation {
     input {
@@ -46,7 +47,7 @@ workflow immcantation {
                 name = name
         }
 
-        call extractor.copy as copy_tigger {
+        call files.copy as copy_tigger {
             input:
                 files = [tigger_genotype.out], destination = destination + "/" + "tigger"
         }
@@ -58,7 +59,7 @@ workflow immcantation {
                 threshold_tsv = shazam_threshold.threshold_tsv
         }
 
-        call extractor.copy as copy_changeo_clone {
+        call files.copy as copy_changeo_clone {
             input:
                 files = [changeo_clone.out], destination = destination + "/" + "changeo_clone"
         }
