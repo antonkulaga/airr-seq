@@ -28,7 +28,7 @@ workflow immcantation {
             format = format
     }
 
-    call extractor.copy as copy_changeo_igblast {
+    call files.copy as copy_changeo_igblast {
         input:
             files = [changeo_igblast.out], destination = destination + "/" + "changeo_igblast"
     }
