@@ -31,7 +31,7 @@ workflow immune_analysis{
         call imm.changeo_igblast as igblast {
             input: sequence = sequence,
                 species = species,
-                prefix = name,
+                prefix = prefix,
                 ig = ig,
                 only_functional = only_functional,
                 partial_alignments = partial_alignments,
@@ -58,10 +58,21 @@ workflow immune_analysis{
         input: files = [merge_airr.out], destination = destination
     }
 
+    call split_chains {
+        input: airr =  copy_merged.out[0]
+    }
+
+    call files.copy as copy_chains{
+        input: files = [split_chains.light, split_chains.heavy], destination = destination
+    }
+
+
 
     output {
-        Array[File] airr_tsvs = copy_airrs.out
+        String airrs_folder =  destination + "/" + "airrs"
         File merged = copy_merged.out[0]
+        File light =  copy_chains.out[0]
+        File heavy =  copy_chains.out[1]
     }
 
 }
@@ -70,7 +81,7 @@ workflow immune_analysis{
 task merge_airr {
     input {
         Array[File] files
-        String filename = ".tsv"
+        String filename = "merged.tsv"
     }
 
     command {
@@ -83,5 +94,30 @@ task merge_airr {
 
     output {
         File out = filename
+    }
+}
+
+task split_chains {
+    input {
+        File airr
+    }
+
+    String link = basename(airr) # to avoid parsedb creating stuff in the input folder
+
+    command {
+        ln -s ~{airr} ~{link}
+        ParseDb.py select -d ~{link} -f v_call -u "IGH" --logic all --regex --outname heavy
+        mv heavy_parse-select.tsv heavy.tsv
+        ParseDb.py select -d ~{link} -f v_call -u "IG[LK]" --logic all --regex --outname light
+        mv light_parse-select.tsv light.tsv
+    }
+
+    runtime {
+        docker: "immcantation/suite:devel"
+    }
+
+    output {
+        File light = "light.tsv"
+        File heavy = "heavy.tsv"
     }
 }
