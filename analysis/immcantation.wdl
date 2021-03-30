@@ -117,6 +117,7 @@ task changeo_igblast {
     output {
         File out = prefix
         File? airr_tsv = prefix + "/" + prefix+"_db-pass.tsv"
+        File? airr_fail_tsv = prefix + "/" + prefix+"_db-fail.tsv"
         File? fmt7 = prefix + "/" + prefix+"_igblast.fmt7"
     }
 }
