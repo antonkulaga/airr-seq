@@ -7,7 +7,7 @@ ADD install.R /tmp/
 RUN R -f /tmp/install.R
 USER magus
 WORKDIR /home/magus/notebooks
-COPY src/* .
+COPY src/* /home/magus/notebooks/
 EXPOSE 8888
 ENTRYPOINT []
 CMD jupyter lab .

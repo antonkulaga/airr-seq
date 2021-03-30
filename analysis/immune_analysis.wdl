@@ -61,12 +61,13 @@ workflow immune_analysis{
     call split_chains {
         input: airr =  copy_merged.out[0]
     }
-
-    call files.copy as copy_chains{
-        input: files = [split_chains.light, split_chains.heavy], destination = destination
+    call translate {
+        input: files = [split_chains.heavy, split_chains.light]
     }
 
-
+    call files.copy as copy_chains{
+        input: files = [translate[1], translate[0]], destination = destination
+    }
 
     output {
         String airrs_folder =  destination + "/" + "airrs"
@@ -119,5 +120,23 @@ task split_chains {
     output {
         File light = "light.tsv"
         File heavy = "heavy.tsv"
+    }
+}
+
+task translate {
+    input {
+        Array[File] files
+        String suffix = "_with_translation"
+    }
+    String gl = "*"+suffix+".tsv"
+    command {
+        translate.R --wd TRUE --suffix ~{suffix} ~{sep=" " files}
+    }
+
+    runtime {
+        docker: "quay.io/comp-bio-aging/immcantation"
+    }
+    output {
+        Array[File] out = glob(gl)
     }
 }
