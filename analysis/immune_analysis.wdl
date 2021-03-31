@@ -55,19 +55,29 @@ workflow immune_analysis{
 
     String merged_name = if(name=="") then "merged.tsv" else name + ".tsv"
 
-    call merge_airr {
+    call merge_airr as merge_passed {
         input: files =  airrs, filename = merged_name
     }
 
+
+    String failed_merged_name = if(name=="") then "failed_merged.tsv" else "failed_"+name + ".tsv"
+
+    call merge_airr as merge_failed {
+        input: files =  airrs_failed, filename = failed_merged_name
+    }
+
+    Array[File] airrs_merged = select_all([merge_passed.out,merge_failed.out])
+
     call files.copy as copy_merged{
-        input: files = [merge_airr.out], destination = destination
+        input: files = airrs_merged, destination = destination
     }
 
     call split_chains {
-        input: airr =  copy_merged.out[0]
+        input: airr =  merge_passed.out
     }
+
     call translate {
-        input: files = [split_chains.heavy, split_chains.heavy_productive, split_chains.heavy_not_productive, split_chains.light, split_chains.light_productive, split_chains.light_not_productive],suffix = "_with_translation"
+        input: files = [copy_merged.out[0], split_chains.heavy, split_chains.heavy_productive, split_chains.heavy_not_productive, split_chains.light, split_chains.light_productive, split_chains.light_not_productive],suffix = "_with_translation"
     }
 
     call files.copy as copy_chains{
@@ -76,7 +86,7 @@ workflow immune_analysis{
 
     output {
         String airrs_folder =  destination + "/" + "airrs"
-        File merged = copy_merged.out[0]
+        Array[File] merged = copy_merged.out
         Array[File] chains = copy_chains.out
     }
 
@@ -113,14 +123,10 @@ task split_chains {
         ln -s ~{airr} ~{link}
         ParseDb.py select -d ~{link} -f v_call -u "IGH" --logic all --regex --outname heavy
         mv heavy_parse-select.tsv heavy.tsv
-        ParseDb.py split -d ~{link} heavy.tsv -f productive
-        mv productive-T.tsv heavy_productive.tsv
-        mv productive-F.tsv heavy_not_productive.tsv
-        ParseDb.py select -d ~{link} -f v_call -u "IG[LK]" --logic all --regex --outname light -f productive -u T
+        ParseDb.py split -d heavy.tsv -f productive
+        ParseDb.py select -d ~{link} -f v_call -u "IG[LK]" --logic all --regex --outname light
         mv light_parse-select.tsv light.tsv
-        ParseDb.py split -d ~{link} light.tsv -f productive
-        mv productive-T.tsv light_productive.tsv
-        mv productive-F.tsv light_not_productive.tsv
+        ParseDb.py split -d light.tsv -f productive
     }
 
     runtime {
@@ -130,10 +136,10 @@ task split_chains {
     output {
         File light = "light.tsv"
         File heavy = "heavy.tsv"
-        File light_productive = "light_productive"
-        File light_not_productive = "light_not_productive"
-        File heavy_productive = "heavy_productive"
-        File heavy_not_productive = "heavy_not_productive"
+        File light_productive = "light_productive-T.tsv"
+        File light_not_productive = "light_productive-F.tsv"
+        File heavy_productive = "heavy_productive-T.tsv"
+        File heavy_not_productive = "heavy_productive-F.tsv"
     }
 }
 
@@ -145,7 +151,7 @@ task translate {
     String gl = "*"+suffix+".tsv"
 
     command {
-        translate.R --wd TRUE --suffix ~{suffix} ~{sep=" " files}
+        /home/magus/notebooks/translate.R --wd TRUE --suffix ~{suffix} ~{sep=" " files}
     }
 
     runtime {
