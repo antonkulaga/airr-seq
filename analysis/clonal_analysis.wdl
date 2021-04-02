@@ -1,126 +1,76 @@
 version development
 
-
 import "https://raw.githubusercontent.com/antonkulaga/bioworkflows/main/common/files.wdl" as files
 
-workflow immcantation {
+workflow clonal_analysis {
     input {
-        File sequence #fasta or fastq
-        String species = "human"
-        Int threads = 6
+        File airr_tsv
         String name
-        Boolean ig = true
-        Boolean only_functional = false
-        Boolean partial_alignments = false
-        Boolean include_tigger = false
+        String distance_model = "ham"
         String format = "airr"
+        String threshold_model = "gamma-gamma"
+        String shazam_method = "density"
         String destination
+        Boolean only_functional = false
 
     }
 
-    call changeo_igblast {
-        input: sequence = sequence,
-            species = species,
-            prefix = name,
-            ig = ig,
+    call shazam_threshold {
+        input:
+            airr_tsv = airr_tsv,
+            name = name,
+            format = format,
+            method = shazam_method,
+            model = threshold_model
+    }
+
+
+    call changeo_clone {
+        input:
+            airr_tsv = airr_tsv,
+            name = name,
+            threshold_tsv = shazam_threshold.threshold_tsv,
+            distance_model = distance_model,
             only_functional = only_functional,
-            partial_alignments = partial_alignments,
             format = format
     }
 
-    call files.copy as copy_changeo_igblast {
+
+    call tigger_genotype {
         input:
-            files = [changeo_igblast.out], destination = destination + "/" + "changeo_igblast"
+            airr_tsv = copy_changeo_clone.out[0],
+            name = name
     }
 
-    if (include_tigger && defined(changeo_igblast.airr_tsv)){
-        File airr_tsv = select_first([changeo_igblast.airr_tsv])
-         call shazam_threshold {
-            input:
-                airr_tsv = airr_tsv,
-                name = name
-        }
+    call files.copy as copy_tigger {
+        input:
+            files = [tigger_genotype.out], destination = destination
+    }
 
-        call tigger_genotype {
-            input:
-                airr_tsv = airr_tsv,
-                name = name
-        }
-
-        call files.copy as copy_tigger {
-            input:
-                files = [tigger_genotype.out], destination = destination + "/" + "tigger"
-        }
-
-        call changeo_clone {
-            input:
-                airr_tsv = airr_tsv,
-                name = name,
-                threshold_tsv = shazam_threshold.threshold_tsv
-        }
-
-        call files.copy as copy_changeo_clone {
-            input:
-                files = [changeo_clone.out], destination = destination + "/" + "changeo_clone"
-        }
-
+    call files.copy as copy_changeo_clone {
+        input:
+            files = [changeo_clone.out], destination = destination
     }
 
     output {
-        Array[File] changeo = copy_changeo_igblast.out
-        Array[File] clones = select_first([copy_changeo_clone.out])
+        File out = copy_changeo_clone.out[0]
+        File clones = out + "/"+ name + "_germ-pass.tsv"
+        File tigger = copy_tigger.out[0]
+        File genotype_fasta = tigger + "/" + name + "_genotype.fasta"
+        File genotype = tigger + "/" + name + "_genotype.pdf"
+        File genotype_tsv = tigger + "/" + name + "_genotyped.tsv"
     }
 
+    #call split_chains {
+    #    input: airr =  merge_passed.out
+    #}
 
+    #call translate {
+    #    input: files = [copy_merged.out[0], split_chains.heavy, split_chains.heavy_productive, split_chains.heavy_not_productive, split_chains.light, split_chains.light_productive, split_chains.light_not_productive],suffix = "_with_translation"
+    #}
 }
 
 
-task changeo_igblast {
-    input {
-            File sequence
-            String species
-            Boolean ig
-            String prefix
-            Boolean only_functional
-            Boolean partial_alignments
-            String format
-        }
-
-    #changeo-igblast -h
-    #Usage: changeo-igblast [OPTIONS]
-    #-s  FASTA or FASTQ sequence file.
-    #-r  Directory containing IMGT-gapped reference germlines.
-    #Defaults to /usr/local/share/germlines/imgt/human/vdj when species is human.
-    #Defaults to /usr/local/share/germlines/imgt/mouse/vdj when species is mouse.
-    #-g  Species name. One of human or mouse. Defaults to human.
-    #-t  Receptor type. One of ig or tr. Defaults to ig.
-    #-b  IgBLAST IGDATA directory, which contains the IgBLAST database, optional_file
-    #and auxillary_data directories. Defaults to /usr/local/share/igblast.
-    #-n  Sample identifier which will be used as the output file prefix.
-    #Defaults to a truncated version of the sequence filename.
-    #-o  Output directory. Will be created if it does not exist.
-    #Defaults to a directory matching the sample identifier in the current working directory.
-    #-f  Output format. One of airr (default) or changeo. Defaults to airr.
-    #-p  Number of subprocesses for multiprocessing tools.
-    #Defaults to the available cores.
-    #-k  Specify to filter the output to only productive/functional sequences.
-    #-i  Specify to allow partial alignments.
-    #-h  This message.
-    command {
-        changeo-igblast -s ~{sequence} -g ~{species} -t ~{if(ig) then "ig" else "tr"}  -n ~{prefix} -f ~{format}  ~{if(only_functional) then "-k" else ""} ~{if(partial_alignments) then "-i" else ""}
-    }
-
-    runtime {
-        docker: "immcantation/suite:devel"
-    }
-
-    output {
-        File out = prefix
-        File? airr_tsv = prefix + "/" + prefix+"_db-pass.tsv"
-        File? airr_fail_tsv = prefix + "/" + prefix+"_db-fail.tsv"
-        File? fmt7 = prefix + "/" + prefix+"_igblast.fmt7"
-    }
-}
 
 task shazam_threshold {
     input {
@@ -207,7 +157,7 @@ task changeo_clone {
         #        -h  This message.
     # ~{if(full_dataset) then "-a" else ""}
     command {
-        changeo-clone -d ~{airr_tsv} -x ~{distance_threshold} -m ~{distance_model} -n ~{name} -f ~{format}
+        changeo-clone -d ~{airr_tsv} -x ~{distance_threshold} -m ~{distance_model} -n changeo_clone  -f ~{format}
     }
 
     runtime {
@@ -215,8 +165,8 @@ task changeo_clone {
     }
 
     output {
-        File out = name
-        File germ_pass_tsv =  name + "/"+ name + "_germ-pass.tsv"
+        File out = "changeo_clone"
+        File germ_pass_tsv =  "changeo_clone" + "/"+ name + "_germ-pass.tsv"
     }
 }
 
@@ -277,5 +227,8 @@ task tigger_genotype {
     }
     output {
         File out = "tigger_genotype"
+        File genotype_fasta = out + "/" + name + "_genotype.fasta"
+        File genotype = out + "/" + name + "_genotype.pdf"
+        File genotype_tsv = out + "/" + name + "_genotyped.tsv"
     }
 }

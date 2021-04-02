@@ -3,7 +3,8 @@ version development
 import "https://raw.githubusercontent.com/antonkulaga/bioworkflows/main/common/files.wdl" as files
 
 #production version
-import "https://raw.githubusercontent.com/antonkulaga/airr-seq/main/analysis/immcantation.wdl" as imm
+import "https://raw.githubusercontent.com/antonkulaga/airr-seq/main/analysis/tasks.wdl" as imm
+import "https://raw.githubusercontent.com/antonkulaga/airr-seq/main/analysis/clonal_analysis.wdl" as clonal
 
 #local debug version (uncomment for debugging and comment the production version)
 #import  "immcantation.wdl" as imm
@@ -72,23 +73,17 @@ workflow immune_analysis{
         input: files = airrs_merged, destination = destination
     }
 
-    call split_chains {
-        input: airr =  merge_passed.out
-    }
 
-    call translate {
-        input: files = [copy_merged.out[0], split_chains.heavy, split_chains.heavy_productive, split_chains.heavy_not_productive, split_chains.light, split_chains.light_productive, split_chains.light_not_productive],suffix = "_with_translation"
-    }
 
-    call files.copy as copy_chains{
-        input: files = translate.out, destination = destination
-    }
+    #call files.copy as copy_chains{
+    #    input: files = translate.out, destination = destination
+    #}
 
-    output {
-        String airrs_folder =  destination + "/" + "airrs"
-        Array[File] merged = copy_merged.out
-        Array[File] chains = copy_chains.out
-    }
+    #output {
+    #    String airrs_folder =  destination + "/" + "airrs"
+    #    Array[File] merged = copy_merged.out
+    #    Array[File] chains = copy_chains.out
+    #}
 
 }
 
@@ -109,55 +104,5 @@ task merge_airr {
 
     output {
         File out = filename
-    }
-}
-
-task split_chains {
-    input {
-        File airr
-    }
-
-    String link = basename(airr) # to avoid parsedb creating stuff in the input folder
-
-    command {
-        ln -s ~{airr} ~{link}
-        ParseDb.py select -d ~{link} -f v_call -u "IGH" --logic all --regex --outname heavy
-        mv heavy_parse-select.tsv heavy.tsv
-        ParseDb.py split -d heavy.tsv -f productive
-        ParseDb.py select -d ~{link} -f v_call -u "IG[LK]" --logic all --regex --outname light
-        mv light_parse-select.tsv light.tsv
-        ParseDb.py split -d light.tsv -f productive
-    }
-
-    runtime {
-        docker: "immcantation/suite:devel"
-    }
-
-    output {
-        File light = "light.tsv"
-        File heavy = "heavy.tsv"
-        File light_productive = "light_productive-T.tsv"
-        File light_not_productive = "light_productive-F.tsv"
-        File heavy_productive = "heavy_productive-T.tsv"
-        File heavy_not_productive = "heavy_productive-F.tsv"
-    }
-}
-
-task translate {
-    input {
-        Array[File] files
-        String suffix = "_with_translation"
-    }
-    String gl = "*"+suffix+".tsv"
-
-    command {
-        /home/magus/notebooks/translate.R --wd TRUE --suffix ~{suffix} ~{sep=" " files}
-    }
-
-    runtime {
-        docker: "quay.io/comp-bio-aging/immcantation"
-    }
-    output {
-        Array[File] out = glob(gl)
     }
 }
