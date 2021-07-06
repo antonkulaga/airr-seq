@@ -1,0 +1,7 @@
+{
+  "trust.fastq_1": "/data/samples/PRJNA648105/SRX8807195/SRR12304932/reads/SRR12304932.fastq_cleaned.fastq.gz",
+  "trust.imgt_reference": "/data/indexes/IMGT/vdj.fa",
+  "trust.destination": "/data/samples/AIRR-Seq/reconstructions/PRJNA648105/fastq",
+  "trust.threads": 12
+}
+

@@ -38,7 +38,7 @@ workflow clonal_analysis {
 
     call tigger_genotype {
         input:
-            airr_tsv = copy_changeo_clone.out[0],
+            airr_tsv = airr_tsv, #changeo_clone.germ_pass_tsv,
             name = name
     }
 
@@ -50,6 +50,10 @@ workflow clonal_analysis {
     call files.copy as copy_changeo_clone {
         input:
             files = [changeo_clone.out], destination = destination
+    }
+
+    call build_trees{
+        input: airr_tsv = changeo_clone.out
     }
 
     output {
@@ -157,7 +161,8 @@ task changeo_clone {
         #        -h  This message.
     # ~{if(full_dataset) then "-a" else ""}
     command {
-        changeo-clone -d ~{airr_tsv} -x ~{distance_threshold} -m ~{distance_model} -n changeo_clone  -f ~{format}
+        changeo-clone -d ~{airr_tsv} -x ~{distance_threshold} -m ~{distance_model} -n ~{name}  -f ~{format}
+        mv ~{name} changeo_clone
     }
 
     runtime {
@@ -225,10 +230,29 @@ task tigger_genotype {
     runtime {
         docker: "immcantation/suite:devel"
     }
+
     output {
         File out = "tigger_genotype"
         File genotype_fasta = out + "/" + name + "_genotype.fasta"
         File genotype = out + "/" + name + "_genotype.pdf"
         File genotype_tsv = out + "/" + name + "_genotyped.tsv"
+    }
+}
+
+task build_trees {
+    input {
+        File airr_tsv
+    }
+    command {
+        BuildTrees.py -d ~{airr_tsv} --outname ex --collapse \
+        --sample 3000 --igphyml --clean all --nproc 1
+    }
+
+    runtime {
+        docker: "immcantation/suite:devel"
+    }
+
+    output {
+
     }
 }

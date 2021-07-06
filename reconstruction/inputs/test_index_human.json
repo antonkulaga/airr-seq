@@ -1,0 +1,6 @@
+{
+  "trust_index.gene_names": "/data/indexes/IMGT/human_vdjc.list",
+  "trust_index.genome": "/data/ensembl/103/species/Homo_sapiens/Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa",
+  "trust_index.gtf": "/data/ensembl/103/species/Homo_sapiens/Homo_sapiens.GRCh38.103.gtf"
+}
+

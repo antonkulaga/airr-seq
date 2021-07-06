@@ -1,0 +1,7 @@
+{
+  "trust.bam": "/data/samples/PRJNA648105/SRX8807195/SRR12304932/aligned/Aligned.sortedByCoord.out.bam",
+  "trust.imgt_reference": "/data/indexes/IMGT/vdj.fa",
+  "trust.destination": "/data/samples/AIRR-Seq/reconstructions/PRJNA648105/bam",
+  "trust.threads": 12
+}
+

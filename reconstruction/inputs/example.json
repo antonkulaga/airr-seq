@@ -1,0 +1,6 @@
+{
+  "trust.imgt_reference": "/data/indexes/IMGT/vdj.fa",
+  "trust.bam": "/data/examples/example.bam",
+  "trust.threads": 12,
+  "trust.destination": "/data/samples/AIRR-Seq/reconstructions/example_bam"
+}

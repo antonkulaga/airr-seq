@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 debug <- FALSE
 
-include = function(pkg){
+include <- function(pkg){
   if(!suppressMessages(require(pkg, character.only = TRUE)))
   install.packages(pkg, character.only = TRUE)
   suppressMessages(library(pkg, pkg, character.only = TRUE))
@@ -11,13 +11,13 @@ include("docopt")
 include("stringr")
 include("alakazam")
 
-translate_db = function(db_path){
+translate_db <- function(db_path){
     db <- readChangeoDb(db_path)
     without_gaps <- gsub("...", "", db$sequence_alignment, fixed=T)
     return(translateDNA(without_gaps))
 }
 
-with_translation = function(db_path){
+with_translation <- function(db_path){
     db <- readChangeoDb(db_path)
     without_gaps <- gsub("...", "", db$sequence_alignment, fixed=T)    
     return (cbind(db,Translation=translateDNA(without_gaps)))     

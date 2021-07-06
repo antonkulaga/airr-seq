@@ -1,0 +1,7 @@
+{
+  "trust.fastq_1": "/data/samples/AIRR-Seq/reconstructions/F_237/F_237_1.fastq.bz2",
+  "trust.fastq_2": "/data/samples/AIRR-Seq/reconstructions/F_237/F_237_2.fastq.bz2",
+  "trust.imgt_reference": "/data/indexes/IMGT/vdj.fa",
+  "trust.threads": 12
+}
+
