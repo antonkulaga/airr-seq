@@ -1,0 +1,9 @@
+{
+  "in_star_we_trust.title": "scRNA-Seq R26Rf",
+  "in_star_we_trust.experiment_folder": "/data/samples/AIRR-Seq/reconstructions/RA/scRNA-Seq/R26cit",
+  "in_star_we_trust.runs": [
+    "SAMN09881305","SAMN09881305","SAMN09881308","SAMN09881308","SAMN09881339","SAMN09881339","SAMN09881340","SAMN09881340","SAMN09881369","SAMN09881369","SAMN09881370","SAMN09881370"
+  ],
+  "in_star_we_trust.star_index_dir": "/data/indexes/star/2.7.2b/Homo_sapiens/GRCh38",
+  "in_star_we_trust.imgt_reference": "/data/indexes/IMGT/vdj.fa"
+}
