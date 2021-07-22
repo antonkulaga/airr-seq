@@ -1,7 +1,7 @@
 {
-  "presto.reads": ["/data/sources/airr-seq/workflows/inputs/Greiff2014/ERR346600_1.fastq", "/data/sources/airr-seq/workflows/inputs/Greiff2014/ERR346600_2.fastq"],
-  "presto.primers": ["/data/sources/airr-seq/workflows/inputs/Greiff2014/Greiff2014_CPrimers.fasta", "/data/sources/airr-seq/workflows/inputs/Greiff2014/Greiff2014_VPrimers.fasta"],
-  "presto.destination": "/data/samples/AIRR-Seq/presto",
+  "presto.reads": ["/data/samples/AIRR-Seq/presto/M1/Greiff2014/ERR346600_1.fastq", "/data/samples/AIRR-Seq/presto/M1/Greiff2014/ERR346600_2.fastq"],
+  "presto.primers": ["/data/samples/AIRR-Seq/presto/M1/Greiff2014/Greiff2014_CPrimers.fasta", "/data/samples/AIRR-Seq/presto/M1/Greiff2014//Greiff2014_VPrimers.fasta"],
+  "presto.destination": "/data/samples/AIRR-Seq/presto/results",
   "presto.name": "M1"
 }
 

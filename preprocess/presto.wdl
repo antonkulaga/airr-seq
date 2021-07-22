@@ -1,13 +1,14 @@
 version development
 
+import "https://raw.githubusercontent.com/antonkulaga/bioworkflows/main/common/files.wdl" as files
+
 workflow presto {
     input {
-
         Array[File] reads
-        Array[File] primers
         String destination
         String name
-
+        Array[File] primers
+        Int threads = 4
     }
 
     call presto{
@@ -16,12 +17,12 @@ workflow presto {
             R2_FILE = reads[1],
             R1_PRIMERS = primers[0],
             R2_PRIMERS = primers[1],
-            NPROC = 4,
+            NPROC = threads,
             name = name
 
     }
 
-    call copy {
+    call files.copy as copy {
         input: destination = destination + "/" + name, files = [presto.out]
     }
 
@@ -107,31 +108,5 @@ task presto {
         File mpv_table = output_dir + "/" + "MPV_table.tab"
         File assembly_pass =  output_dir + "/" + name + "_assemble-pass.fastq"
         File quality_pass =  output_dir + "/" + name + "_quality-pass.fastq"
-                                 }
-}
-
-
-
-task copy {
-    input {
-        Array[File] files
-        String destination
-    }
-
-    String where = sub(destination, ";", "_")
-
-    command {
-        mkdir -p ~{where}
-        cp -L -R -u ~{sep=' ' files} ~{where}
-        declare -a files=(~{sep=' ' files})
-        for i in ~{"$"+"{files[@]}"};
-        do
-        value=$(basename ~{"$"}i)
-        echo ~{where}/~{"$"}value
-        done
-    }
-
-    output {
-        Array[File] out = read_lines(stdout())
     }
 }
