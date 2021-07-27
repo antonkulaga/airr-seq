@@ -1,5 +1,23 @@
 version development
 
+task download_imgt{
+    input {
+
+    }
+
+    command {
+        fetch_imgtdb.sh
+    }
+
+    runtime {
+        docker: "immcantation/suite:devel"
+    }
+
+    output {
+
+    }
+}
+
 task clear_umi {
 
     input {

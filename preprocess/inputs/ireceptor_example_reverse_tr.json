@@ -1,0 +1,15 @@
+{
+  "presto_irep.threads": 4,
+  "presto_irep.name": "test_example_reverse",
+  "presto_irep.reads": [
+    "/data/samples/AIRR-Seq/irepertoire/example/2101-RD-0033-D501-D701_S1_L001_R1_001.fastq",
+    "/data/samples/AIRR-Seq/irepertoire/example/2101-RD-0033-D501-D701_S1_L001_R2_001.fastq"
+  ],
+  "presto_irep.umi_length": 6,
+  "presto_irep.umi_start": 3,
+  "presto_irep.destination": "/data/samples/AIRR-Seq/presto/irep",
+  "presto_irep.coord": "illumina",
+  "presto_irep.flip_reads": true,
+  "presto_irep.revpr": true,
+  "presto_irep.constant_region": "/data/samples/AIRR-Seq/human_imgt_tr_constant.fasta"
+}

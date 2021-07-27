@@ -9,5 +9,6 @@
   "presto_irep.umi_start": 3,
   "presto_irep.destination": "/data/samples/AIRR-Seq/presto/irep",
   "presto_irep.coord": "illumina",
-  "presto_irep.flip_reads": true
+  "presto_irep.flip_reads": false,
+  "presto_irep.constant_region": "/data/samples/AIRR-Seq/human_imgt_constant.fasta"
 }

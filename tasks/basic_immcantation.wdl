@@ -59,8 +59,8 @@ task changeo {
 
     output {
         File results = "changeo"
-        File heavy_chains = "changeo/data_f"
-        File light_chains = "changeo/data_fh"
+        File? heavy_chains = "changeo/data_f"
+        File? light_chains = "changeo/data_fh"
     }
 
 }
