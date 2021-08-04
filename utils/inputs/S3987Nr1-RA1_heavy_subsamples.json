@@ -1,0 +1,8 @@
+{
+  "sample.coord": "illumina",
+  "sample.reads": [  "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-RA_heavy/S3987Nr1-RA1_heavy.1.fastq",
+    "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-RA_heavy/S3987Nr1-RA1_heavy.2.fastq"],
+  "sample.numbers": [10000, 1000, 100],
+  "sample.destination":  "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-RA_heavy",
+  "sample.name": "S3987Nr1-RA1_heavy"
+}

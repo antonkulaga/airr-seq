@@ -2,8 +2,14 @@
   "in_star_we_trust_sc.title": "scRNA-Seq R26Rf",
   "in_star_we_trust_sc.experiment_folder": "/data/samples/AIRR-Seq/reconstructions/RA/scRNA-Seq/R26Ag",
   "in_star_we_trust_sc.runs": [
-    "SAMN09881114","SAMN09881114","SAMN09881116","SAMN09881116","SAMN09881122","SAMN09881122","SAMN09881140","SAMN09881140","SAMN09881145","SAMN09881145","SAMN09881154","SAMN09881154","SAMN09881161","SAMN09881161","SAMN09881183","SAMN09881183","SAMN09881184","SAMN09881184","SAMN09881238","SAMN09881238","SAMN09881259","SAMN09881259","SAMN09881272","SAMN09881272"  ],
+    "SAMN09881114","SAMN09881114","SAMN09881116","SAMN09881116","SAMN09881122","SAMN09881122","SAMN09881140",
+    "SAMN09881140","SAMN09881145","SAMN09881145","SAMN09881154","SAMN09881154","SAMN09881161","SAMN09881161",
+    "SAMN09881183","SAMN09881183","SAMN09881184","SAMN09881184","SAMN09881238","SAMN09881238","SAMN09881259",
+    "SAMN09881259","SAMN09881272","SAMN09881272"  ],
   "in_star_we_trust_sc.star_index_dir": "/data/indexes/star/2.7.2b/Homo_sapiens/GRCh38",
-  "in_star_we_trust_sc.imgt_reference": "/data/indexes/IMGT/vdj.fa"
+  "in_star_we_trust_sc.imgt_reference": "/data/indexes/IMGT/vdj.fa",
+  "in_star_we_trust_sc.max_memory_gb": 58,
+  "in_star_we_trust_sc.align_threads": 1,
+  "in_star_we_trust_sc.zip": "bzip2"
 }
 

@@ -18,6 +18,25 @@ task download_imgt{
     }
 }
 
+
+task convert_headers {
+    input {
+        String format = "imgt"
+    }
+
+    command {
+        ConvertHeaders ~{format} -s /data/imgt/human/irep/vdj/imgt_human_IGLV.fasta
+    }
+
+    runtime {
+        docker: "immcantation/suite:devel"
+    }
+
+    output {
+
+    }
+}
+
 task clear_umi {
 
     input {

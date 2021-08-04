@@ -1,7 +1,7 @@
 version development
 
 import "https://raw.githubusercontent.com/antonkulaga/bioworkflows/main/common/files.wdl" as files
-import "https://raw.githubusercontent.com/antonkulaga/rna-seq/master/pipelines/rna-alignment/align_rna_run.wdl" as star
+import "https://raw.githubusercontent.com/antonkulaga/rna-seq/master/pipelines/rna-alignment/star/star.wdl" as star
 import "https://raw.githubusercontent.com/antonkulaga/airr-seq/main/reconstruction/trust.wdl" as trust_me
 
 # workflow that uses star for rna-seq alignment and trust4 for reconstruction
@@ -24,6 +24,7 @@ workflow in_star_we_trust_sc {
         Boolean skip_technical = true
         Boolean original_names = false
         Boolean deep_folder_structure = true
+        String zip = "gunzip"
     }
 
 
@@ -31,29 +32,28 @@ workflow in_star_we_trust_sc {
         call download_sc {
             input: sra = run, aspera_download = aspera_download
         }
-        call star.star_align as star_align{
+        String copy_to = experiment_folder + "/" + run  + "/" + "aligned"
+
+        call star.star as star_align{
           input: run = run,
                 reads = download_sc.out,
-                index_dir = star_index_dir
-        }
-
-        AlignedRun aligned =  star_align.out
-        String copy_to = experiment_folder + "/" + run  + "/" + "aligned"
-        Pair[AlignedRun, String] mapping = (aligned, copy_to)
-
-        call files.copy as copy_star {
-            input:
-                files = [aligned.sorted, aligned.to_transcriptome, aligned.summary, aligned.log, aligned.progress, aligned.reads_per_gene, aligned.junctions],
-                destination =  copy_to,
+                index_dir = star_index_dir,
+                max_memory = max_memory_gb,
+                threads = align_threads,
+                zip = zip,
+                destination = copy_to
         }
 
         call trust_me.trust as trust {
             input:
-                bam = mapping.left.sorted,
+                bam = star_align.out.sorted,
                 threads = trust_threads,
                 imgt_reference = imgt_reference,
-                destination = mapping.right + "/" + "reconstruction"
+                destination = copy_to + "/" + "reconstruction"
         }
+    }
+    output {
+        Array[File] out = trust.out
     }
 
 }
