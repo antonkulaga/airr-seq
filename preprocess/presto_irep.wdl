@@ -41,8 +41,15 @@ task presto {
         Int NPROC = 4
         Boolean rc = true
         Boolean revpr = true
+        Int collapse_max_missing = 20
+        Int dupcount = 2
+        Int min_quality = 20
     }
 
+    Array[String] basenames = [basename(reads[0]),basename(reads[1])]
+
+    String primer_constant_name = basename(primer_constant)
+    String primer_variable_name = basename(primer_variable)
 
     command {
 
@@ -54,37 +61,44 @@ task presto {
         echo -e "START"
         STEP=0
 
+        ln -s ~{reads[0]} ~{basenames[0]}
+        ln -s ~{reads[1]} ~{basenames[1]}
+        ln -s ~{primer_constant} ~{primer_constant_name}
+        ln -s ~{primer_variable} ~{primer_variable_name}
+
         # Assemble paired ends via mate-pair alignment
         printf "  %2d: %-*s $(date +'%H:%M %D')\n" $((++STEP)) 24 "AssemblePairs align"
-        AssemblePairs.py align -1 ~{reads[1]} -2 ~{reads[0]} --coord ~{coordinates} ~{if(rc) then "--rc tail" else ""} --outname ~{name}  --outdir . --log AP.log --nproc ~{NPROC}
+        AssemblePairs.py align -1 ~{basenames[1]} -2 ~{basenames[0]} --coord ~{coordinates} ~{if(rc) then "--rc tail" else ""} --outname ~{name}  --outdir . --log AP.log --nproc ~{NPROC}
 
         # Remove low quality reads
         printf "  %2d: %-*s $(date +'%H:%M %D')\n" $((++STEP)) 24 "FilterSeq quality"
-        FilterSeq.py quality -s "~{name}_assemble-pass.fastq" -q 20 --outname ~{name} --log FS.log --nproc ~{NPROC}
+        FilterSeq.py quality -s "~{name}_assemble-pass.fastq" -q ~{min_quality} --outname ~{name} --log FS.log --nproc ~{NPROC}
 
         # Identify forward and reverse primers
         printf "  %2d: %-*s $(date +'%H:%M %D')\n" $((++STEP)) 24 "MaskPrimers score"
-        MaskPrimers.py score -s "~{name}_quality-pass.fastq" -p ~{primer_variable} \
+
+        MaskPrimers.py score -s "~{name}_quality-pass.fastq" -p ~{primer_variable_name} \
         --mode mask --pf VPRIMER \
         --outname "~{name}-FWD" --log MPV.log --nproc ~{NPROC}
-        MaskPrimers.py score -s "~{name}-FWD_primers-pass.fastq" -p ~{primer_constant} \
+
+        MaskPrimers.py score -s "~{name}-FWD_primers-pass.fastq" -p ~{primer_constant_name} \
         --mode mask ~{if(revpr) then "--revpr" else ""} --pf CPRIMER \
         --outname "~{name}-REV" --log MPC.log --nproc ~{NPROC}
 
         # Remove duplicate sequences
         printf "  %2d: %-*s $(date +'%H:%M %D')\n" $((++STEP)) 24 "CollapseSeq"
-        CollapseSeq.py -s "~{name}-REV_primers-pass.fastq" -n 20 \
+        CollapseSeq.py -s "~{name}-REV_primers-pass.fastq" -n ~{collapse_max_missing} \
         --uf CPRIMER --cf VPRIMER --act set --inner \
         --outname ~{name}
 
         # Subset to sequences observed at least twice
         printf "  %2d: %-*s $(date +'%H:%M %D')\n" $((++STEP)) 24 "SplitSeq group"
-        SplitSeq.py group -s "~{name}_collapse-unique.fastq" -f DUPCOUNT --num 2 \
+        SplitSeq.py group -s "~{name}_collapse-unique.fastq" -f DUPCOUNT --num ~{dupcount} \
         --outname ~{name}
 
         # Create annotation table of final unique sequences
         printf "  %2d: %-*s $(date +'%H:%M %D')\n" $((++STEP)) 24 "ParseHeaders table"
-        ParseHeaders.py table -s "~{name}_atleast-2.fastq" \
+        ParseHeaders.py table -s "~{name}_atleast-~{dupcount}.fastq" \
         -f ID DUPCOUNT CPRIMER VPRIMER
 
         # Process log files
@@ -92,6 +106,8 @@ task presto {
         ParseLog.py -l AP.log -f ID LENGTH OVERLAP ERROR PVALUE > /dev/null &
         ParseLog.py -l FS.log -f ID QUALITY > /dev/null &
         ParseLog.py -l MP[VC].log -f ID PRIMER ERROR > /dev/null &
+
+        rm ~{basenames[0]} ~{basenames[1]} ~{primer_constant_name} ~{primer_variable_name}
         printf "DONE\n\n"
     }
 

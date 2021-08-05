@@ -34,6 +34,7 @@ task sample_pair {
     }
 
     Array[String] basenames = [basename(reads[0]),basename(reads[1])]
+
     command {
 
         # Make output directory and empty log files

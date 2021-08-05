@@ -2,10 +2,10 @@
   "presto_irep.threads": 12,
   "presto_irep.name": "S3987Nr1-RA_heavy",
   "presto_irep.reads": [
-    "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-RA_heavy/S3987Nr1-RA1_heavy.1.fastq",
-    "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-RA_heavy/S3987Nr1-RA1_heavy.2.fastq"
+    "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-RA_heavy/subsamples/S3987Nr1-RA1_heavy-1_sample2-n1000.fastq",
+    "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-RA_heavy/subsamples/S3987Nr1-RA1_heavy-2_sample2-n1000.fastq"
   ],
-  "presto_irep.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-RA_heavy",
+  "presto_irep.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-RA_heavy/subsamples/sample_1000",
   "presto_irep.coord": "illumina",
   "presto_irep.flip_reads": false,
   "presto_irep.primer_constant": "/data/indexes/imgt/irep/heavy/imgt_human_IGHC.fasta",
