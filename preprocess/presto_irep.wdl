@@ -12,6 +12,7 @@ workflow presto_irep{
         Int min_reads_per_ig = 2
         Int min_length = 196
         Int min_quality = 20
+        Int start_v = 0
         #File constant
         #File variable
 
@@ -22,7 +23,7 @@ workflow presto_irep{
 
     call presto{
         input: name = name, output_dir = "presto",
-        reads = reads, NPROC = threads, min_quality  = min_quality, min_length = min_length
+        reads = reads, NPROC = threads, min_quality  = min_quality, min_length = min_length, start_v = start_v
     }
 
     call files.copy{ input: destination = destination, files = [presto.out] }
@@ -47,6 +48,7 @@ task presto {
         Int const_length = 27
         Int variable_length = 21
         Int min_length
+        Int start_v = 0
     }
 
     Array[String] basenames = [basename(reads[0], ".fastq"),basename(reads[1],".fastq")]
@@ -70,14 +72,14 @@ task presto {
         # Mask primers
 
         MaskPrimers.py extract -s ~{basenames[0]}.fastq --len ~{const_length} --mode mask --pf CPRIMER
-        MaskPrimers.py extract -s ~{basenames[0]}_primers-pass.fastq --revpr --len ~{variable_length} --mode mask --pf VPRIMER
-        PairSeq.py -2 ~{basenames[0]}_primers-pass_primers-pass.fastq -1 ~{basenames[1]}.fastq --2f CPRIMER VPRIMER
+        MaskPrimers.py extract -s ~{basenames[1]}.fastq --start ~{start_v} ~{if(start_v>0) then "--barcode --bf V_barcode" else ""} --len ~{variable_length} --mode cut --pf VPRIMER
+        PairSeq.py -1 ~{basenames[1]}_primers-pass.fastq -2 ~{basenames[0]}_primers-pass.fastq  --1f VPRIMER ~{if(start_v>0) then "V_barcode" else ""} --2f CPRIMER
 
         # Assemble paired ends via mate-pair alignment
         printf "  %2d: %-*s $(date +'%H:%M %D')\n" $((++STEP)) 24 "AssemblePairs align"
 
-        AssemblePairs.py align -1 ~{basenames[1]}_pair-pass.fastq -2 ~{basenames[0]}_primers-pass_primers-pass_pair-pass.fastq \
-          --coord ~{coordinates} --rc tail --2f CPRIMER VPRIMER  \
+        AssemblePairs.py align -1 ~{basenames[1]}_primers-pass_pair-pass.fastq -2 ~{basenames[0]}_primers-pass_pair-pass.fastq \
+          --coord ~{coordinates} --rc tail --2f CPRIMER VPRIMER ~{if(start_v>0) then "V_barcode" else ""}  \
           --outname ~{name}  --outdir . --log AP.log --nproc ~{NPROC}
 
         # Remove low quality reads
@@ -90,7 +92,6 @@ task presto {
         CollapseSeq.py -s "~{name}_length-pass.fastq" -n ~{collapse_max_missing} --uf CPRIMER --cf VPRIMER --act set --inner --outname ~{name}
         SplitSeq.py group -s ~{name}_collapse-unique.fastq -f DUPCOUNT --num ~{dupcount} --outname ~{name}
         rm -rf ~{basenames[0]}.fastq ~{basenames[1]}.fastq
-
     }
 
     runtime {
