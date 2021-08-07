@@ -48,6 +48,7 @@ task changeo_igblast {
         File? fmt7 = prefix + "/" + prefix+"_igblast.fmt7"
     }
 }
+
 task split_chains {
     input {
         File airr

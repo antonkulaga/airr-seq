@@ -83,8 +83,7 @@ task presto {
 
         # Create annotation table of final unique sequences
         printf "  %2d: %-*s $(date +'%H:%M %D')\n" $((++STEP)) 24 "ParseHeaders table"
-        ParseHeaders.py table -s "~{name}_atleast-2.fastq" \
-        -f ID DUPCOUNT CPRIMER VPRIMER
+        ParseHeaders.py table -s "~{name}_atleast-2.fastq" -f ID DUPCOUNT CPRIMER VPRIMER
 
         # Process log files
         printf "  %2d: %-*s $(date +'%H:%M %D')\n" $((++STEP)) 24 "ParseLog"

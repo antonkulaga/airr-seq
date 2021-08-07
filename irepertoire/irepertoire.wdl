@@ -2,17 +2,31 @@ version development
 
 import "https://raw.githubusercontent.com/antonkulaga/bioworkflows/main/common/files.wdl" as files
 
-workflow presto_irep{
+#production version
+import "https://raw.githubusercontent.com/antonkulaga/airr-seq/main/analysis/tasks.wdl" as imm
+import "https://raw.githubusercontent.com/antonkulaga/airr-seq/main/analysis/clonal_analysis.wdl" as clonal
+
+
+workflow irepertoire{
+
     input {
         Array[File] reads
         String destination
         String name
-        String coord = "illumina" #sra
+
+        String species = "human"
+
+        String coordinates = "illumina" #sra
         Int threads = 12
         Int min_reads_per_ig = 2
         Int min_length = 196
         Int min_quality = 20
-        Int start_v = 0
+        Int start_v = 10
+        Int min_dupcount = 2
+        Boolean ig = true
+        Boolean only_functional = false
+        Boolean partial_alignments = true
+        String format = "airr"
         #File constant
         #File variable
 
@@ -23,11 +37,35 @@ workflow presto_irep{
 
     call presto{
         input: name = name, output_dir = "presto",
-        reads = reads, NPROC = threads, min_quality  = min_quality, min_length = min_length, start_v = start_v
+        reads = reads, NPROC = threads, min_quality  = min_quality, min_length = min_length, start_v = start_v, dupcount = min_dupcount,
+        coordinates = coordinates
     }
 
-    call files.copy{ input: destination = destination, files = [presto.out] }
+    call files.copy as copy_presto{ input: destination = destination, files = [presto.results] }
 
+    call imm.changeo_igblast as igblast {
+        input: sequence = presto.out,
+            species = species,
+            prefix = name,
+            ig = ig,
+            only_functional = only_functional,
+            partial_alignments = partial_alignments,
+            format = format
+        #destination = "/" + "immcantation"
+    }
+
+    call files.copy as copy_changeo {
+        input: destination = destination + "/" + "changeo", files = [igblast.out]
+    }
+
+    output {
+        File presto_results = copy_presto.out[0]
+        File changeo_results = copy_changeo.out[0]
+    }
+    #File out = prefix
+    #File? airr_tsv = prefix + "/" + prefix+"_db-pass.tsv"
+    #File? airr_fail_tsv = prefix + "/" + prefix+"_db-fail.tsv"
+    #File? fmt7 = prefix + "/" + prefix+"_igblast.fmt7"
 }
 
 task presto {
@@ -91,6 +129,7 @@ task presto {
         printf "  %2d: %-*s $(date +'%H:%M %D')\n" $((++STEP)) 24 "CollapseSeq"
         CollapseSeq.py -s "~{name}_length-pass.fastq" -n ~{collapse_max_missing} --uf CPRIMER --cf VPRIMER --act set --inner --outname ~{name}
         SplitSeq.py group -s ~{name}_collapse-unique.fastq -f DUPCOUNT --num ~{dupcount} --outname ~{name}
+        ParseHeaders.py table -s "~{name}_atleast-~{dupcount}.fastq" -f ID DUPCOUNT CPRIMER VPRIMER ~{if(start_v>0) then "V_barcode" else ""}
         rm -rf ~{basenames[0]}.fastq ~{basenames[1]}.fastq
     }
 
@@ -99,14 +138,22 @@ task presto {
     }
 
     output {
-        File out = output_dir
-        #File ap_lof = output_dir + "/" + "AP.log"
-        #File ap_table = output_dir + "/" + "AP_table.tab"
-        #File fs_log = output_dir + "/" + "FS.log"
-        #File fs_table = output_dir + "/" + "FS_table.tab"
-        #File mpv_log = output_dir + "/" + "MPV.log"
-        #File mpv_table = output_dir + "/" + "MPV_table.tab"
-        #File assembly_pass =  output_dir + "/" + name + "_assemble-pass.fastq"
-        #File quality_pass =  output_dir + "/" + name + "_quality-pass.fastq"
+        File results = output_dir
+        File out = output_dir + "/" + name + "_atleast-" + dupcount + ".fastq"
+        File headers = output_dir + "/" + name + "_atleast-" + dupcount + "_headers.tab"
+    }
+}
+
+task igblast {
+    input {
+
+    }
+
+    command {
+
+    }
+
+    output {
+
     }
 }
