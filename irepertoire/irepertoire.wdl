@@ -65,9 +65,14 @@ workflow irepertoire{
 
     }
 
+    call imm.translate as translate {
+        input: files = [igblast.airr_tsv, clonal_analysis.clones],suffix = "_with_translation"
+    }
+
     output {
         File presto_results = copy_presto.out[0]
         File changeo_results = copy_changeo.out[0]
+        File clonal = clonal_analysis.out
     }
     #File out = prefix
     #File? airr_tsv = prefix + "/" + prefix+"_db-pass.tsv"
@@ -148,19 +153,5 @@ task presto {
         File results = output_dir
         File out = output_dir + "/" + name + "_atleast-" + dupcount + ".fastq"
         File headers = output_dir + "/" + name + "_atleast-" + dupcount + "_headers.tab"
-    }
-}
-
-task igblast {
-    input {
-
-    }
-
-    command {
-
-    }
-
-    output {
-
     }
 }

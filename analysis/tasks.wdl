@@ -11,6 +11,7 @@ task changeo_igblast {
         Boolean only_functional
         Boolean partial_alignments
         String format
+        Boolean avoid_temp = true
     }
 
     #changeo-igblast -h
@@ -36,7 +37,7 @@ task changeo_igblast {
     command {
         changeo-igblast -s ~{sequence} -g ~{species} \
         -r /usr/local/share/germlines/imgt/human/vdj -b /usr/local/share/igblast \
-        -t ~{if(ig) then "ig" else "tr"}  -n ~{prefix} \
+        -t ~{if(ig) then "ig" else "tr"}  -n ~{prefix} ~{if(avoid_temp) then "-z" else ""} \
         -f ~{format}  ~{if(only_functional) then "-k" else ""} ~{if(partial_alignments) then "-i" else ""}
     }
 

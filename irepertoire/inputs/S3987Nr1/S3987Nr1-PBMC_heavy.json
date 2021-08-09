@@ -9,5 +9,7 @@
   "irepertoire.coordinates": "illumina",
   "irepertoire.min_length": 230,
   "irepertoire.min_quality": 25,
-  "irepertoire.start_v": 0
+  "irepertoire.start_v": 0,
+  "irepertoire.only_functional": true,
+  "irepertoire.partial_alignments": false
 }
