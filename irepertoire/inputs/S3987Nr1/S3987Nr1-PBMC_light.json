@@ -1,0 +1,13 @@
+{
+  "irepertoire.threads": 12,
+  "irepertoire.name": "S3987Nr1-PBMC_light",
+  "irepertoire.reads": [
+    "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-PBMC_light/S3987Nr1-PBMC_light.1.fastq",
+    "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-PBMC_light/S3987Nr1-PBMC_light.2.fastq"
+  ],
+  "irepertoire.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-PBMC_light",
+  "irepertoire.coordinates": "illumina",
+  "irepertoire.min_length": 230,
+  "irepertoire.min_quality": 25,
+  "irepertoire.start_v": 10
+}

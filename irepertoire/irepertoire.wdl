@@ -58,6 +58,13 @@ workflow irepertoire{
         input: destination = destination + "/" + "changeo", files = [igblast.out]
     }
 
+    call clonal.clonal_analysis as clonal_analysis{
+        input:
+          airr_tsv = igblast.airr_tsv, name = name, distance_model = "ham", format = "airr",
+          threshold_model = "gamma-gamma", shazam_method = "density", destination = destination, only_functional = only_functional
+
+    }
+
     output {
         File presto_results = copy_presto.out[0]
         File changeo_results = copy_changeo.out[0]

@@ -1,6 +1,6 @@
 {
   "irepertoire.threads": 12,
-  "irepertoire.name": "S3987Nr1-RA_heavy",
+  "irepertoire.name": "S3987Nr1-PBMC_heavy",
   "irepertoire.reads": [
     "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-PBMC_heavy/subsamples/S3987Nr1-PBMC_heavy-1_sample2-n1000.fastq",
     "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-PBMC_heavy/subsamples/S3987Nr1-PBMC_heavy-2_sample2-n1000.fastq"

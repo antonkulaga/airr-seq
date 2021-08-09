@@ -34,7 +34,10 @@ task changeo_igblast {
     #-i  Specify to allow partial alignments.
     #-h  This message.
     command {
-        changeo-igblast -s ~{sequence} -g ~{species} -t ~{if(ig) then "ig" else "tr"}  -n ~{prefix} -f ~{format}  ~{if(only_functional) then "-k" else ""} ~{if(partial_alignments) then "-i" else ""}
+        changeo-igblast -s ~{sequence} -g ~{species} \
+        -r /usr/local/share/germlines/imgt/human/vdj -b /usr/local/share/igblast \
+        -t ~{if(ig) then "ig" else "tr"}  -n ~{prefix} \
+        -f ~{format}  ~{if(only_functional) then "-k" else ""} ~{if(partial_alignments) then "-i" else ""}
     }
 
     runtime {
@@ -43,7 +46,7 @@ task changeo_igblast {
 
     output {
         File out = prefix
-        File? airr_tsv = prefix + "/" + prefix+"_db-pass.tsv"
+        File airr_tsv = prefix + "/" + prefix+"_db-pass.tsv"
         File? airr_fail_tsv = prefix + "/" + prefix+"_db-fail.tsv"
         File? fmt7 = prefix + "/" + prefix+"_igblast.fmt7"
     }
