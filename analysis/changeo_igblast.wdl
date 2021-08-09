@@ -56,7 +56,7 @@ task igblast {
 
     output {
         File out = "igblast"
-        File fmt7 = "igblast/"+basename(fasta, "_igblast.fasta")+".fmt7"
+        File fmt7 = "igblast" + "/" + basename(fasta, ".fasta")+"_igblast.fmt7"
     }
 }
 
