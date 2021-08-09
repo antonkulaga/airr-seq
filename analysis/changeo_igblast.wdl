@@ -66,16 +66,17 @@ task changeo {
         File fasta
         File fmt7
         String name
+        String format = "airr"
+        String outdir = "changeo_igblast"
     }
 
     command {
-        mkdir -p changeo
+        mkdir -p changeo_igblast
         MakeDb.py igblast \
         -s ~{fasta} -i ~{fmt7} \
-        -r /usr/local/share/germlines/imgt/human/vdj/ --outdir changeo \
-        --regions --scores --outname ~{name}  --extended
+        -r /usr/local/share/germlines/imgt/human/vdj/ --outdir ~{outdir}--outname ~{name} --extended --format ~{format}
 
-        ParseDb.py select -d changeo/~{name}_db-pass.tab -f FUNCTIONAL -u T TRUE --outname ~{name}_f
+        ParseDb.py select -d  ~{outdir}/~{name}_db-pass.tab -f FUNCTIONAL -u T TRUE --outname ~{name}_f
     }
 
     runtime {
@@ -83,7 +84,7 @@ task changeo {
     }
 
     output {
-        File out = "changeo"
+        File out = outdir
     }
 
 }
