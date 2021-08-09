@@ -1,4 +1,4 @@
-version 1.0
+version development
 
 workflow changeo_igblast {
     input {

@@ -3,7 +3,7 @@ version development
 import "https://raw.githubusercontent.com/antonkulaga/bioworkflows/main/common/files.wdl" as files
 
 #production version
-import "https://raw.githubusercontent.com/antonkulaga/airr-seq/main/analysis/tasks.wdl" as imm
+import "https://raw.githubusercontent.com/antonkulaga/airr-seq/main/analysis/changeo_igblast.wdl" as changeo
 import "https://raw.githubusercontent.com/antonkulaga/airr-seq/main/analysis/clonal_analysis.wdl" as clonal
 
 
@@ -42,13 +42,8 @@ workflow irepertoire{
     }
 
     call files.copy as copy_presto{ input: destination = destination, files = [presto.results] }
-
-    call fastq_conversion {
-        input: fastq = presto.out
-    }
-
-    call igblast{
-        input: fasta = fastq_conversion.out, threads = threads
+    call changeo.changeo_igblast as igblast{
+        input: fastq = presto.out, threads = threads, name = name
     }
 
     call files.copy as copy_changeo {
@@ -148,41 +143,5 @@ task presto {
         File results = output_dir
         File out = output_dir + "/" + name + "_atleast-" + dupcount + ".fastq"
         File headers = output_dir + "/" + name + "_atleast-" + dupcount + "_headers.tab"
-    }
-}
-
-task fastq_conversion {
-    input{
-        File fastq
-    }
-    command {
-        fastq2fasta.py ~{fastq}
-    }
-    runtime {
-        docker: "immcantation/suite:devel"
-    }
-    output {
-        File out = basename(fastq, ".fastq") + ".fasta"
-    }
-}
-
-task igblast {
-    input {
-        File fasta
-        Int threads
-    }
-    command {
-        mkdir -p igblast
-        AssignGenes.py igblast -s ~{fasta} \
-        -b /usr/local/share/igblast --organism human --loci ig \
-        --format blast --outdir igblast --nproc ~{threads}
-    }
-    runtime {
-        docker: "immcantation/suite:devel"
-    }
-
-    output {
-        File out = "igblast"
-        File fmt7 = "igblast/"+basename(fasta, "_igblast.fasta")+".fmt7"
     }
 }
