@@ -84,7 +84,7 @@ task changeo {
         mkdir -p changeo_igblast
         MakeDb.py igblast \
         -s ~{fasta} -i ~{fmt7} \
-        -r /usr/local/share/germlines/imgt/human/vdj/ --outdir ~{outdir}--outname ~{name} --extended --format ~{format}
+        -r /usr/local/share/germlines/imgt/human/vdj/ --outdir ~{outdir} --outname ~{name} --extended --format ~{format}
 
         ParseDb.py select -d  ~{outdir}/~{name}_db-pass.tsv -f productive -u T TRUE --outname ~{name}_f
     }

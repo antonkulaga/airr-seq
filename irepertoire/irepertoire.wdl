@@ -43,7 +43,7 @@ workflow irepertoire{
 
     call files.copy as copy_presto{ input: destination = destination, files = [presto.results] }
     call changeo.changeo_igblast as igblast{
-        input: fastq = presto.out, threads = threads, name = name
+        input: fastq = presto.out, threads = threads, name = name, destination = destination
     }
 
     call clonal.clonal_analysis as clonal_analysis{
