@@ -46,22 +46,18 @@ workflow irepertoire{
         input: fastq = presto.out, threads = threads, name = name
     }
 
-    call files.copy as copy_changeo {
-        input: destination = destination + "/" + "changeo", files = [igblast.out]
+    call clonal.clonal_analysis as clonal_analysis{
+        input:
+          airr_tsv = igblast.airr_tsv, name = name, distance_model = "ham", format = "airr",
+          threshold_model = "gamma-gamma", shazam_method = "density", destination = destination, only_functional = only_functional
     }
-
-    #call clonal.clonal_analysis as clonal_analysis{
-    #    input:
-    #      airr_tsv = igblast.airr_tsv, name = name, distance_model = "ham", format = "airr",
-    #      threshold_model = "gamma-gamma", shazam_method = "density", destination = destination, only_functional = only_functional
-    #}
     #call imm.translate as translate {
     #    input: files = [igblast.airr_tsv, clonal_analysis.clones],suffix = "_with_translation"
     #}
 
     output {
         File presto_results = copy_presto.out[0]
-        File changeo_results = copy_changeo.out[0]
+        File changeo_results = igblast.out
         #File clonal = clonal_analysis.out
     }
     #File out = prefix
