@@ -46,11 +46,11 @@ workflow irepertoire{
         input: fastq = presto.out, threads = threads, name = name, destination = destination
     }
 
-    call clonal.clonal_analysis as clonal_analysis{
-        input:
-          airr_tsv = igblast.airr_tsv, name = name, distance_model = "ham", format = "airr",
-          threshold_model = "gamma-gamma", shazam_method = "density", destination = destination, only_functional = only_functional
-    }
+    #call clonal.clonal_analysis as clonal_analysis{
+    #    input:
+    #      airr_tsv = igblast.airr_tsv, name = name, distance_model = "ham", format = "airr",
+    #      threshold_model = "gamma-gamma", shazam_method = "density", destination = destination, only_functional = only_functional
+    #}
     #call imm.translate as translate {
     #    input: files = [igblast.airr_tsv, clonal_analysis.clones],suffix = "_with_translation"
     #}

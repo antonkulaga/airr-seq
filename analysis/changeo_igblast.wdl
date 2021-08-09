@@ -24,13 +24,25 @@ workflow changeo_igblast {
         input: fasta = fastq_conversion.out, fmt7 = igblast.fmt7, name = name
     }
 
-    call files.copy as copy {
+    call files.copy as copy_folder {
         input: destination = destination, files = [changeo.out]
     }
 
+    call translate {
+        input: files = [changeo.airr_tsv,changeo.functional]
+    }
+
+    call files.copy as copy_translations {
+        input: destination = copy_folder.out[0], files = translate.out
+    }
+
+
+
     output {
-        File out = copy.out[0]
+        File out = copy_folder.out[0]
         File airr_tsv = changeo.airr_tsv
+        File airr_tsv_translated = copy_translations.out[0]
+        File airr_tsv_translated_functional = copy_translations.out[1]
     }
 }
 
@@ -99,4 +111,23 @@ task changeo {
         File functional = outdir + "/" + name + "_f_parse-select.tsv"
     }
 
+}
+
+task translate {
+    input {
+        Array[File] files
+        String suffix = "_with_translation"
+    }
+    String gl = "*"+suffix+".tsv"
+
+    command {
+        /home/magus/notebooks/translate.R --wd TRUE --suffix ~{suffix} ~{sep=" " files}
+    }
+
+    runtime {
+        docker: "quay.io/comp-bio-aging/immcantation"
+    }
+    output {
+        Array[File] out = glob(gl)
+    }
 }
