@@ -11,7 +11,9 @@ workflow clonal_analysis {
         String threshold_model = "gamma-gamma"
         String shazam_method = "density"
         String destination
-        Boolean only_functional = false
+        Boolean only_functional = true
+        Int tree_sample_size = -1 #3000
+        Int threads = 12 #threads for build tree
 
     }
 
@@ -53,7 +55,7 @@ workflow clonal_analysis {
     }
 
     call build_trees{
-        input: airr_tsv = changeo_clone.out
+        input: airr_tsv = changeo_clone.germ_pass_tsv, sample_size = tree_sample_size, threads = threads
     }
 
     output {
@@ -138,6 +140,7 @@ task changeo_clone {
         String format = "airr"
         Boolean only_functional = false
         Boolean full_dataset = true
+        String outdir = "changeo_clone"
     }
     String distance_threshold = threshold_tsv[1][1]
 
@@ -162,7 +165,7 @@ task changeo_clone {
     # ~{if(full_dataset) then "-a" else ""}
     command {
         changeo-clone -d ~{airr_tsv} -x ~{distance_threshold} -m ~{distance_model} -n ~{name}  -f ~{format}
-        mv ~{name} changeo_clone
+        mv ~{name} ~{outdir}
     }
 
     runtime {
@@ -170,8 +173,8 @@ task changeo_clone {
     }
 
     output {
-        File out = "changeo_clone"
-        File germ_pass_tsv =  "changeo_clone" + "/"+ name + "_germ-pass.tsv"
+        File out = outdir
+        File germ_pass_tsv =  outdir + "/"+ name + "_germ-pass.tsv"
     }
 }
 
@@ -180,6 +183,9 @@ task tigger_genotype {
     input {
         File airr_tsv #/data/changeo/sample/sample_db-pass.tab
         String name
+        Int minSeq = 25 #50 #5 #x
+        Int minGerm = 100 #200 #20 #y
+        String outdir = "tigger_genotype"
     }
 
     #         Usage: /usr/local/bin/tigger-genotype [options]
@@ -224,7 +230,7 @@ task tigger_genotype {
 
     command {
         mkdir tigger_genotype
-        tigger-genotype -d ~{airr_tsv} -n ~{name} -o tigger_genotype
+        tigger-genotype -d ~{airr_tsv} -n ~{name} -o ~{outdir} -x ~{minSeq} -y ~{minGerm}
     }
 
     runtime {
@@ -232,20 +238,21 @@ task tigger_genotype {
     }
 
     output {
-        File out = "tigger_genotype"
-        File genotype_fasta = out + "/" + name + "_genotype.fasta"
-        File genotype = out + "/" + name + "_genotype.pdf"
-        File genotype_tsv = out + "/" + name + "_genotyped.tsv"
+        File out = outdir
+        File genotype_fasta = outdir + "/" + name + "_genotype.fasta"
+        File genotype = outdir + "/" + name + "_genotype.pdf"
+        File genotype_tsv = outdir + "/" + name + "_genotyped.tsv"
     }
 }
 
 task build_trees {
     input {
         File airr_tsv
+        Int threads
+        Int sample_size = -1
     }
     command {
-        BuildTrees.py -d ~{airr_tsv} --outname ex --collapse \
-        --sample 3000 --igphyml --clean all --nproc 1
+        BuildTrees.py -d ~{airr_tsv} --outname ex --collapse --sample ~{sample_size} --igphyml --clean all --nproc ~{threads}
     }
 
     runtime {

@@ -1,0 +1,7 @@
+{
+  "clonal_analysis.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-RA1_heavy/changeo_igblast/clones",
+  "clonal_analysis.format": "airr",
+  "clonal_analysis.name": "our_ramos",
+  "clonal_analysis.distance_model": "ham",
+  "clonal_analysis.airr_tsv": "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-RA1_heavy/changeo_igblast/S3987Nr1-RA_heavy_f_parse-select_with_translation.tsv"
+}

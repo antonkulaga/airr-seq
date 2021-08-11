@@ -11,5 +11,5 @@
   "irepertoire.min_quality": 25,
   "irepertoire.start_v": 0,
   "irepertoire.only_functional": true,
-  "irepertoire.partial_alignment": false
+  "irepertoire.partial_alignments": false
 }

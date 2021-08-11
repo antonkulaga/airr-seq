@@ -19,8 +19,9 @@ translate_db <- function(db_path){
 
 with_translation <- function(db_path){
     db <- readChangeoDb(db_path)
-    without_gaps <- gsub("...", "", db$sequence_alignment, fixed=T)    
-    return (cbind(db,Translation=translateDNA(without_gaps)))     
+    without_gaps <- gsub("...", "", db$sequence_alignment, fixed=T)
+    db_with_props <- aminoAcidProperties(db, seq="junction", nt=TRUE, trim=FALSE, label="cdr3")
+    return (cbind(db_with_props,Translation=translateDNA(without_gaps)))
 }
 
 doc <- 'Usage:

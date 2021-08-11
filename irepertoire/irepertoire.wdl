@@ -118,10 +118,14 @@ task presto {
           --coord ~{coordinates} --rc tail --2f CPRIMER VPRIMER ~{if(start_v>0) then "V_barcode" else ""}  \
           --outname ~{name}  --outdir . --log AP.log --nproc ~{NPROC}
 
+        ParseLog.py -l AP.log -f ID LENGTH OVERLAP ERROR PVALUE
+
         # Remove low quality reads
         printf "  %2d: %-*s $(date +'%H:%M %D')\n" $((++STEP)) 24 "FilterSeq quality"
         FilterSeq.py quality -s "~{name}_assemble-pass.fastq" -q ~{min_quality} --outname ~{name} --log FS_quality.log --nproc ~{NPROC}
         FilterSeq.py length -s "~{name}_quality-pass.fastq" -n ~{min_length} --outname ~{name} --log FS_length.log --nproc ~{NPROC}
+
+        ParseLog.py -l FS_quality.log -f ID QUALITY
 
         # Remove duplicate sequences
         printf "  %2d: %-*s $(date +'%H:%M %D')\n" $((++STEP)) 24 "CollapseSeq"
@@ -137,6 +141,7 @@ task presto {
 
     output {
         File results = output_dir
+        File AP_table = output_dir + "/" + "AP_table.tab"
         File out = output_dir + "/" + name + "_atleast-" + dupcount + ".fastq"
         File headers = output_dir + "/" + name + "_atleast-" + dupcount + "_headers.tab"
     }
