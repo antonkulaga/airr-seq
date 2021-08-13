@@ -1,4 +1,5 @@
-include = function(pkg){
+#!/usr/bin/env Rscript
+include <- function(pkg){
  if(!suppressMessages(require(pkg, character.only = TRUE)))
    install.packages(pkg, character.only = TRUE)
  suppressMessages(library(pkg, pkg, character.only = TRUE))
@@ -15,7 +16,7 @@ doc <- 'Usage:
   Options:
    -w --wd <wd> [default: TRUE]
    -n --name <name>
-   -b --binwidth <binwidth> [default: 0.02]
+   -b --binwidth <binwidth> [default: 0.0]
    -s --suffix <suffix> [default: _with_clones].
    -h --help     Show this screen.'
 
@@ -41,6 +42,8 @@ results <- spectralClones(db, "vj")
 write.table(results@vjl_groups, file=file.path(paste0(name,"_vjl_groups",'.tsv')), quote=FALSE, row.names = FALSE, sep='\t')
 
 
-png(file=paste0(name+values$suffix,".png"), width = 800, height = 600)
-plot(results, binwidth=0.02)
-dev.off()
+png(file=paste0(name, values$suffix,".png"), width = 800, height = 600)
+if(binwidth > 0){
+ plot(results, binwidth = binwidth)
+} else plot(results)
+if(debug == TRUE) {dev.off()}

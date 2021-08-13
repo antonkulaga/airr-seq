@@ -8,6 +8,9 @@ RUN R -f /tmp/install.R
 USER magus
 WORKDIR /home/magus/notebooks
 COPY src/* /home/magus/notebooks/
+
+ENV PATH="/home/magus/notebooks:${PATH}"
+
 EXPOSE 8888
 ENTRYPOINT []
 CMD jupyter lab .
