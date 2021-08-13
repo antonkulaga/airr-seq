@@ -11,6 +11,8 @@ workflow irepertoire{
 
     input {
         Array[File] reads
+        File barcodes_fasta
+        File barcodes_tsv
         String destination
         String name
 
@@ -35,14 +37,25 @@ workflow irepertoire{
 
     }
 
-    call presto{
+    call fastqc {
+        input: output_dir = "fastqc_results", reads = reads, barcodes_tsv = barcodes_tsv
+    }
+
+    call files.copy as copy_fastqc {
+        input: destination = destination, files = [fastqc.results]
+    }
+
+    call presto {
         input: name = name, output_dir = "presto",
-        reads = reads, NPROC = threads, min_quality  = min_quality, min_length = min_length, start_v = start_v, dupcount = min_dupcount,
+        reads = reads, NPROC = threads, min_quality = min_quality, min_length = min_length, start_v = start_v, dupcount = min_dupcount,
         coordinates = coordinates
     }
 
-    call files.copy as copy_presto{ input: destination = destination, files = [presto.results] }
-    call changeo.changeo_igblast as igblast{
+    call files.copy as copy_presto { 
+        input: destination = destination, files = [presto.results]
+    }
+    
+    call changeo.changeo_igblast as igblast {
         input: fastq = presto.out, threads = threads, name = name, destination = destination
     }
 
@@ -64,6 +77,27 @@ workflow irepertoire{
     #File? airr_tsv = prefix + "/" + prefix+"_db-pass.tsv"
     #File? airr_fail_tsv = prefix + "/" + prefix+"_db-fail.tsv"
     #File? fmt7 = prefix + "/" + prefix+"_igblast.fmt7"
+}
+
+task fastqc {
+    input {
+        String output_dir = "fastqc_results"
+        Array[File] reads
+        File barcodes_tsv
+    }
+
+    command {
+        mkdir -p ~{output_dir}
+        fastqc --adapters ~{barcodes_tsv} --outdir ~{output_dir} ~{reads[0]} ~{reads[1]}
+    }
+
+    runtime {
+        docker: "biocontainers/fastqc:v0.11.9_cv8"
+    }
+
+    output {
+        File results = output_dir
+    }
 }
 
 task presto {
