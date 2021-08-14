@@ -5,13 +5,9 @@
     "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-PBMC_heavy/subsamples/S3987Nr1-PBMC_heavy-1_sample2-n1000.fastq",
     "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-PBMC_heavy/subsamples/S3987Nr1-PBMC_heavy-2_sample2-n1000.fastq"
   ],
-  "irepertoire.barcodes_fasta": "/data/samples/AIRR-Seq/OURS/S3987Nr1/demultiplexed/barcodes.fasta",
-  "irepertoire.barcodes_tsv": "/data/samples/AIRR-Seq/OURS/S3987Nr1/demultiplexed/barcodes.tsv",
   "irepertoire.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-PBMC_heavy/subsamples/sample_1000",
   "irepertoire.coordinates": "illumina",
   "irepertoire.min_length": 196,
   "irepertoire.min_quality": 25,
-  "irepertoire.start_v": 0,
-  "irepertoire.only_functional": true,
-  "irepertoire.partial_alignments": false
+  "irepertoire.start_v": 0
 }
