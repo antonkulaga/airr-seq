@@ -11,8 +11,7 @@ workflow irepertoire{
 
     input {
         Array[File] reads
-        File barcodes_fasta
-        File barcodes_tsv
+
         String destination
         String name
 
@@ -25,20 +24,10 @@ workflow irepertoire{
         Int min_quality = 20
         Int start_v = 10
         Int min_dupcount = 2
-        Boolean ig = true
-        Boolean only_functional = false
-        Boolean partial_alignments = true
-        String format = "airr"
-        #File constant
-        #File variable
-
-        #Float maxerror = 0.2
-        #Float maxgap = 0.5
-
     }
 
     call fastqc {
-        input: output_dir = "fastqc_results", reads = reads, barcodes_tsv = barcodes_tsv
+        input: output_dir = "fastqc_results", reads = reads
     }
 
     call files.copy as copy_fastqc {
@@ -59,36 +48,43 @@ workflow irepertoire{
         input: fastq = presto.out, threads = threads, name = name, destination = destination
     }
 
-    #call clonal.clonal_analysis as clonal_analysis{
-    #    input:
-    #      airr_tsv = igblast.airr_tsv, name = name, distance_model = "ham", format = "airr",
-    #      threshold_model = "gamma-gamma", shazam_method = "density", destination = destination, only_functional = only_functional
-    #}
-    #call imm.translate as translate {
-    #    input: files = [igblast.airr_tsv, clonal_analysis.clones],suffix = "_with_translation"
-    #}
+    call analyze_clones {
+        input:
+        airr_tsv = igblast.airr_tsv_translated_functional,
+        name = name
+    }
+
+    call files.copy as copy_clones {
+        input: destination = destination + "/" + "clones",
+        files = [
+            analyze_clones.out,
+            analyze_clones.histogram,
+            analyze_clones.counts,
+            analyze_clones.vjl_groups,
+            analyze_clones.abundance_curve_chart,
+            analyze_clones.abundance_curve_tsv]
+    }
+
 
     output {
         File presto_results = copy_presto.out[0]
         File changeo_results = igblast.out
+        File clones = copy_clones.destination_folder
+
         #File clonal = clonal_analysis.out
     }
-    #File out = prefix
-    #File? airr_tsv = prefix + "/" + prefix+"_db-pass.tsv"
-    #File? airr_fail_tsv = prefix + "/" + prefix+"_db-fail.tsv"
-    #File? fmt7 = prefix + "/" + prefix+"_igblast.fmt7"
+
 }
 
 task fastqc {
     input {
         String output_dir = "fastqc_results"
         Array[File] reads
-        File barcodes_tsv
     }
 
     command {
         mkdir -p ~{output_dir}
-        fastqc --adapters ~{barcodes_tsv} --outdir ~{output_dir} ~{reads[0]} ~{reads[1]}
+        fastqc --outdir ~{output_dir} ~{reads[0]} ~{reads[1]}
     }
 
     runtime {
@@ -122,9 +118,6 @@ task presto {
     }
 
     Array[String] basenames = [basename(reads[0], ".fastq"),basename(reads[1],".fastq")]
-
-    #String constant_name = basename(constant)
-    #String variable_name = basename(variable)
 
     command {
 
@@ -178,5 +171,56 @@ task presto {
         File AP_table = output_dir + "/" + "AP_table.tab"
         File out = output_dir + "/" + name + "_atleast-" + dupcount + ".fastq"
         File headers = output_dir + "/" + name + "_atleast-" + dupcount + "_headers.tab"
+    }
+}
+
+
+task tigger_genotype {
+    input {
+        File airr_tsv #/data/changeo/sample/sample_db-pass.tab
+        String name
+        Int minSeq = 25 #50 #5 #x
+        Int minGerm = 100 #200 #20 #y
+        String outdir = "tigger_genotype"
+    }
+
+    command {
+        mkdir tigger_genotype
+        tigger-genotype -d ~{airr_tsv} -n ~{name} -o ~{outdir} -x ~{minSeq} -y ~{minGerm}
+    }
+
+    runtime {
+        docker: "immcantation/suite:devel"
+    }
+
+    output {
+        File out = outdir
+        File genotype_fasta = outdir + "/" + name + "_genotype.fasta"
+        File genotype = outdir + "/" + name + "_genotype.pdf"
+        File genotype_tsv = outdir + "/" + name + "_genotyped.tsv"
+    }
+}
+
+task analyze_clones {
+    input {
+        File airr_tsv
+        String name
+        String suffix = "_with_clones"
+    }
+
+    command {
+        clones.R --name ~{name} --suffix ~{suffix} ~{airr_tsv}
+    }
+
+    runtime {
+        docker: "quay.io/comp-bio-aging/immcantation"
+    }
+    output {
+        File out = name + suffix + ".tsv"
+        File histogram = name + suffix + ".png"
+        File counts = name + "_clone_counts.tsv"
+        File vjl_groups = name+"_vjl_groups.tsv"
+        File abundance_curve_tsv = name+"_abundance_curve.tsv"
+        File abundance_curve_chart = name+"_abundance_curve.png"
     }
 }
