@@ -24,7 +24,7 @@ workflow irepertoire{
         Int min_quality = 20
         Int start_v = 10
         Int min_dupcount = 2
-        Int clones_bin_width = 0.02
+        Float clones_bin_width = 0.02
     }
 
     call fastqc {
@@ -53,7 +53,8 @@ workflow irepertoire{
         input:
         airr_tsv = igblast.airr_tsv_translated_functional,
         name = name,
-        binwidth = clones_bin_width
+        binwidth = clones_bin_width,
+        threads = threads
     }
 
     call files.copy as copy_clones {
@@ -209,15 +210,17 @@ task analyze_clones {
         String name
         String suffix = "_with_clones"
         Float binwidth = 0.02
+        Int threads
     }
 
     command {
-        clones.R --name ~{name} --suffix ~{suffix} --binwidth ~{binwidth} ~{airr_tsv}
+        clones.R --name ~{name} --suffix ~{suffix} --threads ~{threads} --binwidth ~{binwidth} ~{airr_tsv}
     }
 
     runtime {
         docker: "quay.io/comp-bio-aging/immcantation"
     }
+
     output {
         File out = name + suffix + ".tsv"
         File histogram = name + suffix + ".png"
