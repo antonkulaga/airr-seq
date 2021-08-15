@@ -25,6 +25,7 @@ workflow irepertoire{
         Int start_v = 10
         Int min_dupcount = 2
         Float clones_bin_width = 0.02
+        Int max_memory_gb = 96
     }
 
     call fastqc {
@@ -38,7 +39,7 @@ workflow irepertoire{
     call presto {
         input: name = name, output_dir = "presto",
         reads = reads, NPROC = threads, min_quality = min_quality, min_length = min_length, start_v = start_v, dupcount = min_dupcount,
-        coordinates = coordinates
+        coordinates = coordinates, max_memory = max_memory_gb
     }
 
     call files.copy as copy_presto { 
@@ -54,7 +55,8 @@ workflow irepertoire{
         airr_tsv = igblast.airr_tsv_translated_functional,
         name = name,
         binwidth = clones_bin_width,
-        threads = threads
+        threads = threads,
+        max_memory = max_memory_gb
     }
 
     call files.copy as copy_clones {
@@ -118,6 +120,7 @@ task presto {
         Int variable_length = 21
         Int min_length
         Int start_v = 0
+        Int max_memory
     }
 
     Array[String] basenames = [basename(reads[0], ".fastq"),basename(reads[1],".fastq")]
@@ -167,6 +170,8 @@ task presto {
 
     runtime {
         docker: "immcantation/suite:devel"
+        docker_memory: "~{max_memory}G"
+        docker_cpu: "~{NPROC+1}"
     }
 
     output {
@@ -211,6 +216,7 @@ task analyze_clones {
         String suffix = "_with_clones"
         Float binwidth = 0.02
         Int threads
+        Int max_memory
     }
 
     command {
@@ -219,6 +225,8 @@ task analyze_clones {
 
     runtime {
         docker: "quay.io/comp-bio-aging/immcantation"
+        docker_memory: "~{max_memory}G"
+        docker_cpu: "~{threads+1}"
     }
 
     output {
