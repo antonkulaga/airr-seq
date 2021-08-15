@@ -21,7 +21,7 @@ doc <- "Usage:
    -s --suffix <suffix> [default: _with_clones].
    -h --help     Show this screen."
 
-debug <- TRUE
+debug <- FALSE
 if (debug == TRUE) {
   tsv <- file.path("/data", "samples", "AIRR-Seq", "OURS", "S3987Nr1", "S3987Nr1-PBMC_heavy", "changeo_igblast", "S3987Nr1-PBMC_heavy_f_parse-select_with_translation.tsv")  # 'clones', 'changeo_clone',  'our_pbmc_germ-pass.tsv')
   args <- paste("--suffix _with_clones --name S3987Nr1-PBMC_heavy", tsv)
