@@ -70,6 +70,21 @@ workflow irepertoire{
             analyze_clones.abundance_curve_tsv]
     }
 
+    call analyze_diversity {
+        input: clones_tsv = analyze_clones.out, name = name
+    }
+
+    call files.copy as copy_diversity {
+        input: destination = destination + "/clones" + "/diversity",
+            files = [
+                analyze_diversity.clone_counts_tsv,
+                analyze_diversity.coverages_tsv,
+                analyze_diversity.abundance_tsv,
+                analyze_diversity.abundance_chart,
+                analyze_diversity.diversity_tsv,
+                analyze_diversity.diversity_chart,
+            ]
+    }
 
     output {
         File presto_results = copy_presto.out[0]
@@ -220,7 +235,7 @@ task analyze_clones {
     }
 
     command {
-        clones.R --name ~{name} --suffix ~{suffix} --threads ~{threads} --binwidth ~{binwidth} ~{airr_tsv}
+        clones.R analyze_clones --name ~{name} --suffix ~{suffix} --threads ~{threads} --binwidth ~{binwidth} ~{airr_tsv}
     }
 
     runtime {
@@ -236,5 +251,29 @@ task analyze_clones {
         File vjl_groups = name+"_vjl_groups.tsv"
         File abundance_curve_tsv = name+"_abundance_curve.tsv"
         File abundance_curve_chart = name+"_abundance_curve.png"
+    }
+}
+
+task analyze_diversity {
+    input {
+        File clones_tsv
+        String name
+    }
+
+    command {
+        clones.R analyze_diversity --name ~{name} ~{clones_tsv}
+    }
+    
+    runtime {
+        docker: "quay.io/comp-bio-aging/immcantation"
+    }
+    
+    output {
+        File clone_counts_tsv = name + "_clone_counts.tsv"
+        File coverages_tsv = name + "_coverages.tsv"
+        File abundance_tsv = name + "abundance_curve.tsv"
+        File abundance_chart = name + "abundancy_curve.png"
+        File diversity_tsv = name + "diversity.tsv"
+        File diversity_chart = name + "diversity.png"
     }
 }
