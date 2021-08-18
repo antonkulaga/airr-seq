@@ -1,0 +1,10 @@
+{
+  "anarci.name": "abYsis_RF_heavy",
+  "anarci.fasta": "/data/samples/AIRR-Seq/abYsis_RF/input/abYsis_RF_heavy_aa.fasta",
+  "anarci.scheme": "martin",
+  "anarci.species": "human",
+  "anarci.threads": 12,
+  "anarci.restrict": "heavy",
+  "anarci.assign_germline": true,
+  "anarci.destination": "/data/samples/AIRR-Seq/abYsis_RF"
+}

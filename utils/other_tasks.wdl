@@ -60,3 +60,42 @@ task clear_umi {
         Array[File] out = [read_1_name + "_processed.fastq", read_2_name + "_processed.fastq"]
     }
 }
+
+task convert_db {
+    input {
+
+    }
+
+    command {
+
+    }
+
+    output {
+
+    }
+}
+
+task anarci {
+    input {
+    String species = "human"
+    String scheme = "martin"
+    File fasta
+    String name
+    String hitfile
+    Int threads
+
+}
+
+    command {
+        ANARCI --sequence ~{fasta} --outfile ~{name} --scheme ~{scheme}  --csv --outfile_hits ~{hitfile} --ncpu ~{}
+    }
+
+    runtime {
+        docker: "quay.io/biocontainers/anarci:2021.02.04--pyhdfd78af_0"
+
+    }
+
+    output {
+
+    }
+}

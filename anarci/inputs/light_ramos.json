@@ -1,0 +1,10 @@
+{
+  "anarci.name": "Ramos_1_light_4689",
+  "anarci.sequence": "TSSDVGGYNYVSWYQQNPGKAPKLMIYDVSNRPSGISNRFSGSKSGNTASLTISGLQADDEADYYCTSYTNDSNSQVFGGGTKLTVL",
+  "anarci.scheme": "martin",
+  "anarci.species": "human",
+  "anarci.threads": 1,
+  "anarci.restrict": "light",
+  "anarci.assign_germline": true,
+  "anarci.destination": "/data/samples/AIRR-Seq/OURS/EDITS/RAMOS"
+}

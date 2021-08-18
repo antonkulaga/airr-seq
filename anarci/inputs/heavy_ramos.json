@@ -1,0 +1,10 @@
+{
+  "anarci.name": "Ramos_1_heavy_29829",
+  "anarci.sequence": "TCGVYGGSFSGYYWSWIRQPPGKGLEWIGEINHSGSTNYNPSLKSRVTISVDTSKKQLSLKLSSVNAADTAVYYCARVITRASPGTDGRYGMDVWGQGTTVTVSS",
+  "anarci.scheme": "martin",
+  "anarci.species": "human",
+  "anarci.threads": 1,
+  "anarci.restrict": "heavy",
+  "anarci.assign_germline": true,
+  "anarci.destination": "/data/samples/AIRR-Seq/OURS/EDITS/RAMOS"
+}
