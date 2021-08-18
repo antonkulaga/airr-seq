@@ -1,10 +1,10 @@
-{
+{ 
   "irepertoire.reads": [
-    "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-PBMC_light/S3987Nr1-PBMC_light.1.fastq",
-    "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-PBMC_light/S3987Nr1-PBMC_light.2.fastq"
+    "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-RA1_heavy/S3987Nr1-RA1_heavy.1.fastq",
+    "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-RA1_heavy/S3987Nr1-RA1_heavy.2.fastq"
   ],
-  "irepertoire.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-PBMC_light",
-  "irepertoire.name": "S3987Nr1-PBMC_light",
+  "irepertoire.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-RA1_heavy",
+  "irepertoire.name": "S3987Nr1-RA1_heavy",
   "irepertoire.species": "human",
   "irepertoire.coordinates": "illumina",
   "irepertoire.threads": 12,
