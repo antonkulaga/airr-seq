@@ -64,10 +64,11 @@ workflow irepertoire{
         files = [
             analyze_clones.out,
             analyze_clones.histogram,
-            analyze_clones.counts,
-            analyze_clones.vjl_groups,
-            analyze_clones.abundance_curve_chart,
-            analyze_clones.abundance_curve_tsv]
+            # analyze_clones.counts,
+            analyze_clones.vjl_groups
+            # analyze_clones.abundance_curve_chart,
+            # analyze_clones.abundance_curve_tsv
+        ]
     }
 
     call analyze_diversity {
@@ -90,7 +91,7 @@ workflow irepertoire{
         File presto_results = copy_presto.out[0]
         File changeo_results = igblast.out
         File clones = copy_clones.destination_folder
-
+        File diversity = copy_diversity.destination_folder
         #File clonal = clonal_analysis.out
     }
 
@@ -247,10 +248,10 @@ task analyze_clones {
     output {
         File out = name + suffix + ".tsv"
         File histogram = name + suffix + ".png"
-        File counts = name + "_clone_counts.tsv"
+        # File counts = name + "_clone_counts.tsv"
         File vjl_groups = name+"_vjl_groups.tsv"
-        File abundance_curve_tsv = name+"_abundance_curve.tsv"
-        File abundance_curve_chart = name+"_abundance_curve.png"
+        # File abundance_curve_tsv = name+"_abundance_curve.tsv"
+        # File abundance_curve_chart = name+"_abundance_curve.png"
     }
 }
 
@@ -271,9 +272,9 @@ task analyze_diversity {
     output {
         File clone_counts_tsv = name + "_clone_counts.tsv"
         File coverages_tsv = name + "_coverages.tsv"
-        File abundance_tsv = name + "abundance_curve.tsv"
-        File abundance_chart = name + "abundancy_curve.png"
-        File diversity_tsv = name + "diversity.tsv"
-        File diversity_chart = name + "diversity.png"
+        File abundance_tsv = name + "_abundance_curve.tsv"
+        File abundance_chart = name + "_abundancy_curve.png"
+        File diversity_tsv = name + "_diversity.tsv"
+        File diversity_chart = name + "_diversity.png"
     }
 }

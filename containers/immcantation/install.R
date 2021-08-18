@@ -7,3 +7,5 @@ to_install <- c(
   "docopt" #for CLI
 )
 install.packages(to_install, dependencies = TRUE)
+
+BiocManager::install("ShortRead", update=FALSE, ask=FALSE)
