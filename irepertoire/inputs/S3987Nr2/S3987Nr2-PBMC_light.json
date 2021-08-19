@@ -1,13 +1,18 @@
 {
-  "irepertoire.threads": 12,
-  "irepertoire.name": "S3987Nr2-PBMC_light",
   "irepertoire.reads": [
-    "/data/samples/AIRR-Seq/OURS/S3987Nr2/demultiplexed/trimmed-PBMC_light_1.fastq",
-    "/data/samples/AIRR-Seq/OURS/S3987Nr2/demultiplexed/trimmed-PBMC_light_2.fastq"
+    "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-PBMC1_light/S3987Nr2-PBMC1_light.1.fastq",
+    "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-PBMC1_light/S3987Nr2-PBMC1_light.2.fastq"
   ],
-  "irepertoire.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-PBMC_light",
+  "irepertoire.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-PBMC1_light",
+  "irepertoire.name": "S3987Nr2-PBMC1_light",
+  "irepertoire.species": "human",
   "irepertoire.coordinates": "illumina",
+  "irepertoire.threads": 12,
+  "irepertoire.min_reads_per_ig": 2,
   "irepertoire.min_length": 230,
   "irepertoire.min_quality": 25,
-  "irepertoire.start_v": 0
+  "irepertoire.start_v": 0,
+  "irepertoire.min_dupcount": 2,
+  "irepertoire.clones_bin_width": 0.02,
+  "irepertoire.max_memory_gb": 96
 }

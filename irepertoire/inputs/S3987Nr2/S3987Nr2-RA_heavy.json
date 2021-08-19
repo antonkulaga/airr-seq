@@ -1,13 +1,18 @@
 {
-  "irepertoire.threads": 12,
-  "irepertoire.name": "S3987Nr2-RAMOS_heavy",
   "irepertoire.reads": [
-    "/data/samples/AIRR-Seq/OURS/S3987Nr2/demultiplexed/trimmed-RAMOS_heavy_1.fastq",
-    "/data/samples/AIRR-Seq/OURS/S3987Nr2/demultiplexed/trimmed-RAMOS_heavy_2.fastq"
+    "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-RAMOS_heavy/S3987Nr2-RAMOS_heavy.1.fastq",
+    "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-RAMOS_heavy/S3987Nr2-RAMOS_heavy.2.fastq"
   ],
   "irepertoire.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-RAMOS_heavy",
+  "irepertoire.name": "S3987Nr2-RAMOS_heavy",
+  "irepertoire.species": "human",
   "irepertoire.coordinates": "illumina",
+  "irepertoire.threads": 12,
+  "irepertoire.min_reads_per_ig": 2,
   "irepertoire.min_length": 230,
   "irepertoire.min_quality": 25,
-  "irepertoire.start_v": 0
+  "irepertoire.start_v": 0,
+  "irepertoire.min_dupcount": 2,
+  "irepertoire.clones_bin_width": 0.02,
+  "irepertoire.max_memory_gb": 96
 }

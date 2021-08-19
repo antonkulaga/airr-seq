@@ -93,6 +93,7 @@ workflow irepertoire{
 
 }
 
+
 task fastqc {
     input {
         String output_dir = "fastqc_results"
@@ -234,7 +235,7 @@ task analyze_clones {
     }
 
     runtime {
-        docker: "quay.io/comp-bio-aging/immcantation"
+        docker: "immcantation_local"
         docker_memory: "~{max_memory}G"
         docker_cpu: "~{threads+1}"
     }
@@ -257,7 +258,7 @@ task analyze_diversity {
     }
     
     runtime {
-        docker: "quay.io/comp-bio-aging/immcantation"
+        docker: "immcantation_local"
     }
     
     output {
