@@ -26,7 +26,7 @@ workflow anarci {
     }
 
     output {
-        File out = copy.destination_folder
+        File out = copy.out[0]
     }
 }
 
@@ -48,8 +48,7 @@ task anarci {
     command {
         # Make output directory and empty log files
         mkdir -p ~{output_dir}; cd ~{output_dir}
-
-        ANARCI --sequence ~{fasta} ~{sequence} --outfile ~{name} --scheme ~{scheme} \
+        ANARCI ~{"-i " +fasta} ~{"--sequence " +sequence} --outfile ~{name} --scheme ~{scheme} \
         --csv --outfile_hits ~{name}_hit.txt --ncpu ~{threads} \
         ~{if(assign_germline) then "--assign_germline" else ""} -r ~{restrict}
     }
