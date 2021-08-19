@@ -1,0 +1,12 @@
+{
+  "anarci_airr.chains_restriction": "light",
+  "anarci_airr.name": "RAMOS_light_1",
+  "anarci_airr.destination":  "/data/samples/AIRR-Seq/OURS/anarci_mother_of_order/RAMOS_1_light",
+  "anarci_airr.threads": 12,
+  "anarci_airr.sequence_id_field": "sequence_id",
+  "anarci_airr.sequence_field": "Translation",
+  "anarci_airr.airr": "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-RA1_light/clones/S3987Nr1-RA1_light_with_clones.tsv",
+  "anarci_airr.meta_fields": ["duplicate_count","clone_id"],
+  "anarci_airr.assign_germline": true
+}
+

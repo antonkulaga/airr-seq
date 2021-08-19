@@ -24,7 +24,7 @@ doc <- "Usage:
    -h --help     Show this screen."
 
 debug <- FALSE
-debug_command <- "analyze_diversity"  # {"analyze_clones", "analyze_diversity"}
+debug_command <- "analyze_clones"  # {"analyze_clones", "analyze_diversity"}
 if (debug == TRUE) {
     if (debug_command == "analyze_clones") {
         tsv <- file.path("/data", "samples", "AIRR-Seq", "OURS", "S3987Nr1", "S3987Nr1-PBMC_heavy", "changeo_igblast", "S3987Nr1-PBMC_heavy_f_parse-select_with_translation.tsv")  # 'clones', 'changeo_clone',  'our_pbmc_germ-pass.tsv')    
@@ -72,7 +72,54 @@ writeAnalysisTable <- function(table, filepath) {
     print(paste0("Output is written to ", filepath))
 }
 
-# Compute functions
+computeSpectralClones <- function(
+    db, threads, verbose = TRUE) {
+    
+    results <- tryCatch({
+            scoper::spectralClones(db, "vj", verbose = verbose, nproc = threads)
+            },
+            warning = function(cond) {
+                iter_max_warning = 15000
+                nstart_warning = 5000
+                print(paste0(
+                    "Warning issued. Retrying with iter_max=", iter_max_warning,
+                    "; nstart=", nstart_warning
+                ))
+                scoper::spectralClones(
+                    db,
+                    "vj",
+                    verbose = TRUE, 
+                    iter_max = iter_max_warning,
+                    nstart = nstart_warning
+                )
+        })
+    return(results)
+}
+
+if (analyze_clones == TRUE) {
+    db <- alakazam::readChangeoDb(tsv)
+
+    print(paste("starting spectral analyzis with ", threads, "threads"))
+
+    # Clonal assignment using identical nucleotide sequences
+    results <- computeSpectralClones(db, threads, verbose=TRUE)
+
+    writeAnalysisTable(results@vjl_groups, build_filepath(name, "vjl_groups", "tsv"))
+
+    print(paste("writing spectral analyzes results", file.path(paste0(name, values$suffix, ".tsv"))))
+    writeChangeoDb(results@db, file.path(paste0(name, values$suffix, ".tsv")))
+
+    print(paste("writing spectral analyzes picture", file.path(paste0(name, values$suffix, ".png"))))
+    png(file = paste0(name, values$suffix, ".png"), width = 800, height = 600)
+    if (binwidth > 0) {
+        print(paste("binwidth is", binwidth))
+      plot(results, binwidth = binwidth)
+    } else plot(results)
+    if (debug == TRUE) {
+      dev.off()
+    }
+}
+
 computeCloneCounts <- function(clones_results, name) {
     print("Computing clonotypes counts")
     counts <- alakazam::countClones(clones_results, copy = "duplicate_count")
@@ -151,31 +198,6 @@ computeDiversity <- function(abundancyCurve, name, debug) {
     return(diversity)
 }
 
-
-# Main
-if (analyze_clones == TRUE) {
-    db <- readChangeoDb(tsv)
-
-    print(paste("starting spectral analyzis with ", threads, "threads"))
-
-    # Clonal assignment using identical nucleotide sequences
-    results <- scoper::spectralClones(db, "vj", nproc = threads)
-
-    writeAnalysisTable(results@vjl_groups, build_filepath(name, "vjl_groups", "tsv"))
-
-    print(paste("writing spectral analyzes results", file.path(paste0(name, values$suffix, ".tsv"))))
-    writeChangeoDb(results@db, file.path(paste0(name, values$suffix, ".tsv")))
-
-    print(paste("writing spectral analyzes picture", file.path(paste0(name, values$suffix, ".png"))))
-    png(file = paste0(name, values$suffix, ".png"), width = 800, height = 600)
-    if (binwidth > 0) {
-        print(paste("binwidth is", binwidth))
-      plot(results, binwidth = binwidth)
-    } else plot(results)
-    if (debug == TRUE) {
-      dev.off()
-    }
-}
 if (analyze_diversity == TRUE) {
     results <- alakazam::readChangeoDb(clones_tsv)
     counts <- computeCloneCounts(results, name)
