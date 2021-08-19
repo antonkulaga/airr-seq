@@ -27,8 +27,10 @@ workflow anarci_airr {
         input: files=[airr_to_fasta.out], destination = destination
           }
 
+    File created_fasta = copy_fasta.out[0] + "/" + basename(airr, ".tsv") + "_sequences.fasta"
+
     call mother_of_order.anarci as anarci{
-        input: destination = destination, fasta = copy_fasta.out[0],
+        input: destination = destination, fasta = created_fasta,
             species = species, scheme = scheme,
            name = name, threads = threads,
            restrict = chains_restriction,
