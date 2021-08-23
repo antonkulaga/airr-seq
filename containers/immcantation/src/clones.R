@@ -53,7 +53,7 @@ analyze_diversity <- values$analyze_diversity
 
 # Helper functions
 build_filepath <- function(name, suffix, type="tsv") {
-    if (type %in% c("tsv", "png")) {
+    if (type %in% c("tsv", "svg")) {
         return(
             file.path(paste0(name, "_", suffix, ".", type))
         )
@@ -109,8 +109,8 @@ if (analyze_clones == TRUE) {
     print(paste("writing spectral analyzes results", file.path(paste0(name, values$suffix, ".tsv"))))
     writeChangeoDb(results@db, file.path(paste0(name, values$suffix, ".tsv")))
 
-    print(paste("writing spectral analyzes picture", file.path(paste0(name, values$suffix, ".png"))))
-    png(file = paste0(name, values$suffix, ".png"), width = 800, height = 600)
+    print(paste("writing spectral analyzes picture", file.path(paste0(name, values$suffix, ".svg"))))
+    svg(file = paste0(name, values$suffix, ".svg"), width = 800, height = 600)
     if (binwidth > 0) {
         print(paste("binwidth is", binwidth))
       plot(results, binwidth = binwidth)
@@ -165,7 +165,7 @@ computeCoverage <- function(counts) {
 
 plotAbundancy <- function(abundanceCurve, name, filepath, debug) {
     sample_colors <- c(`-1h` = "seagreen", `+7d` = "steelblue")
-    png(file = filepath, width = 800, height = 600)
+    svg(file = filepath, width = 800, height = 600)
     # Plots a rank abundance curve of the relative clonal abundances
     plot(abundanceCurve, colors = sample_colors, legend_title = name)
     if (debug == TRUE) {
@@ -178,12 +178,12 @@ computeAbundancy <- function(clones_results, name, debug) {
     print("Calculates abundancy with 95% confidence interval via 200 bootstrap realizations")
     abundanceCurve <- alakazam::estimateAbundance(clones_results, ci = 0.95, nboot = 200, clone = "clone_id", progress = TRUE)
     writeAnalysisTable(abundanceCurve@abundance, build_filepath(name, "abundance_curve", "tsv"))
-    plotAbundancy(abundanceCurve, name, build_filepath(name, "abundancy_curve", "png"), debug)
+    plotAbundancy(abundanceCurve, name, build_filepath(name, "abundancy_curve", "svg"), debug)
     return(abundanceCurve)
 }
 
 plotDiversity <- function(diversity, filepath, debug) {
-    png(file = filepath, width = 800, height = 600)
+    svg(file = filepath, width = 800, height = 600)
     plot(diversity)
     if (debug == TRUE) {
       dev.off()
@@ -194,7 +194,7 @@ plotDiversity <- function(diversity, filepath, debug) {
 computeDiversity <- function(abundancyCurve, name, debug) {
     diversity <- alakazam::alphaDiversity(abundancyCurve)
     writeAnalysisTable(diversity@diversity, build_filepath(name, "diversity", "tsv"))
-    plotDiversity(diversity, build_filepath(name, "diversity", "png"), debug)
+    plotDiversity(diversity, build_filepath(name, "diversity", "svg"), debug)
     return(diversity)
 }
 
@@ -202,6 +202,14 @@ if (analyze_diversity == TRUE) {
     results <- alakazam::readChangeoDb(clones_tsv)
     counts <- computeCloneCounts(results, name)
     computeCoverage(counts)
-    abundanceCurve <- computeAbundancy(results, name, debug)
-    diversity <- computeDiversity(abundanceCurve, name, debug)
+    
+    tryCatch({
+        abundanceCurve <- computeAbundancy(results, name, debug)
+        diversity <- computeDiversity(abundanceCurve, name, debug)
+        },
+        error = function(cond) {
+            print(cond)
+            print("Further execution halted.")
+        }
+    )
 }
