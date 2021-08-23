@@ -15,7 +15,8 @@
         "irepertoire.start_v": 0,
         "irepertoire.min_dupcount": 2,
         "irepertoire.clones_bin_width": 0.02,
-        "irepertoire.max_memory_gb": 96
+        "irepertoire.max_memory_gb": 96,
+        "irepertoire.spectral_method": "novj"
       },
       {
         "irepertoire.reads": [
@@ -33,7 +34,8 @@
         "irepertoire.start_v": 0,
         "irepertoire.min_dupcount": 2,
         "irepertoire.clones_bin_width": 0.02,
-        "irepertoire.max_memory_gb": 96
+        "irepertoire.max_memory_gb": 96,
+        "irepertoire.spectral_method": "novj"
       },
       {
         "irepertoire.reads": [
@@ -51,7 +53,8 @@
         "irepertoire.start_v": 0,
         "irepertoire.min_dupcount": 2,
         "irepertoire.clones_bin_width": 0.02,
-        "irepertoire.max_memory_gb": 96
+        "irepertoire.max_memory_gb": 96,
+        "irepertoire.spectral_method": "novj"
       },
       {
         "irepertoire.reads": [
@@ -69,6 +72,7 @@
         "irepertoire.start_v": 0,
         "irepertoire.min_dupcount": 2,
         "irepertoire.clones_bin_width": 0.02,
-        "irepertoire.max_memory_gb": 96
+        "irepertoire.max_memory_gb": 96,
+        "irepertoire.spectral_method": "novj"
       }
 ]
