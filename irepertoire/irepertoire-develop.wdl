@@ -4,8 +4,7 @@ import "https://raw.githubusercontent.com/antonkulaga/bioworkflows/main/common/f
 
 #production version
 import "https://raw.githubusercontent.com/antonkulaga/airr-seq/main/analysis/changeo_igblast.wdl" as changeo
-import "https://raw.githubusercontent.com/antonkulaga/airr-seq/main/analysis/clonal_analysis.wdl" as clonal
-
+import "https://raw.githubusercontent.com/ursueugen/airr-seq/main/analysis/clonal_analysis/clonal_analysis.wdl" as clonal
 
 workflow irepertoire{
 
@@ -26,6 +25,7 @@ workflow irepertoire{
         Int min_dupcount = 2
         Float clones_bin_width = 0.02
         Int max_memory_gb = 96
+        String spectral_method = "novj"
     }
 
     call fastqc {
@@ -50,45 +50,18 @@ workflow irepertoire{
         input: fastq = presto.out, threads = threads, name = name, destination = destination
     }
 
-    call analyze_clones {
-        input:
-        airr_tsv = igblast.airr_tsv_translated_functional,
-        name = name,
-        binwidth = clones_bin_width,
-        threads = threads,
-        max_memory = max_memory_gb
-    }
-
-    call files.copy as copy_clones {
-        input: destination = destination + "/" + "clones",
-        files = [
-            analyze_clones.out,
-            analyze_clones.histogram,
-            analyze_clones.vjl_groups
-        ]
-    }
-
-    call analyze_diversity {
-        input: clones_tsv = analyze_clones.out, name = name
-    }
-
-    call files.copy as copy_diversity {
-        input: destination = destination + "/clones" + "/diversity",
-            files = [
-                analyze_diversity.clone_counts_tsv,
-                analyze_diversity.coverages_tsv,
-                analyze_diversity.abundance_tsv,
-                analyze_diversity.abundance_chart,
-                analyze_diversity.diversity_tsv,
-                analyze_diversity.diversity_chart,
-            ]
+    call clonal.clonal_analysis as clonal_analysis {
+        input: airr_tsv = igblast.airr_tsv_translated_functional, 
+        destination = destination, name = name, method = spectral_method,
+        threads = threads, clones_bin_width = clones_bin_width, 
+        max_memory_gb = max_memory_gb
     }
 
     output {
         File presto_results = copy_presto.out[0]
         File changeo_results = igblast.out
-        File clones = copy_clones.destination_folder
-        File diversity = copy_diversity.destination_folder
+        File clones = clonal_analysis.clones
+        File diversity = clonal_analysis.diversity
     }
 
 }
@@ -217,56 +190,5 @@ task tigger_genotype {
         File genotype_fasta = outdir + "/" + name + "_genotype.fasta"
         File genotype = outdir + "/" + name + "_genotype.pdf"
         File genotype_tsv = outdir + "/" + name + "_genotyped.tsv"
-    }
-}
-
-task analyze_clones {
-    input {
-        File airr_tsv
-        String name
-        String suffix = "_with_clones"
-        Float binwidth = 0.02
-        Int threads
-        Int max_memory
-    }
-
-    command {
-        clones.R analyze_clones --name ~{name} --suffix ~{suffix} --threads ~{threads} --binwidth ~{binwidth} ~{airr_tsv}
-    }
-
-    runtime {
-        docker: "immcantation_local"
-        docker_memory: "~{max_memory}G"
-        docker_cpu: "~{threads+1}"
-    }
-
-    output {
-        File out = name + suffix + ".tsv"
-        File histogram = name + suffix + ".png"
-        File vjl_groups = name+"_vjl_groups.tsv"
-    }
-}
-
-task analyze_diversity {
-    input {
-        File clones_tsv
-        String name
-    }
-
-    command {
-        clones.R analyze_diversity --name ~{name} ~{clones_tsv}
-    }
-    
-    runtime {
-        docker: "immcantation_local"
-    }
-    
-    output {
-        File clone_counts_tsv = name + "_clone_counts.tsv"
-        File coverages_tsv = name + "_coverages.tsv"
-        File abundance_tsv = name + "_abundance_curve.tsv"
-        File abundance_chart = name + "_abundancy_curve.png"
-        File diversity_tsv = name + "_diversity.tsv"
-        File diversity_chart = name + "_diversity.png"
     }
 }

@@ -56,7 +56,7 @@
       {
         "irepertoire.reads": [
           "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-RAMOS_light/S3987Nr2-RAMOS_light.1.fastq",
-          "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-RAMOS_light/S3987Nr2-RAMOS_light.1.fastq"
+          "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-RAMOS_light/S3987Nr2-RAMOS_light.2.fastq"
         ],
         "irepertoire.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-RAMOS_light",
         "irepertoire.name": "S3987Nr2-RAMOS_light",

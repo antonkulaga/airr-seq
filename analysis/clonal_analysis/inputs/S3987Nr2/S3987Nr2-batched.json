@@ -1,0 +1,38 @@
+[
+  {
+    "clonal_analysis.airr_tsv": "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-PBMC1_heavy/changeo_igblast/S3987Nr2-PBMC1_heavy_db-pass_with_translation.tsv",
+    "clonal_analysis.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-PBMC1_heavy",
+    "clonal_analysis.name": "S3987Nr2-PBMC1_heavy",
+    "clonal_analysis.method": "novj",
+    "clonal_analysis.threads": 12,
+    "clonal_analysis.clones_bin_width": 0.02,
+    "clonal_analysis.max_memory_gb": 96
+  },
+  {
+    "clonal_analysis.airr_tsv": "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-PBMC1_light/changeo_igblast/S3987Nr2-PBMC1_light_db-pass_with_translation.tsv",
+    "clonal_analysis.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-PBMC1_light",
+    "clonal_analysis.name": "S3987Nr2-PBMC1_light",
+    "clonal_analysis.method": "novj",
+    "clonal_analysis.threads": 12,
+    "clonal_analysis.clones_bin_width": 0.02,
+    "clonal_analysis.max_memory_gb": 96
+  },
+  {
+    "clonal_analysis.airr_tsv": "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-RAMOS_heavy/changeo_igblast/S3987Nr2-RAMOS_heavy_db-pass_with_translation.tsv",
+    "clonal_analysis.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-RAMOS_heavy",
+    "clonal_analysis.name": "S3987Nr2-RAMOS_heavy",
+    "clonal_analysis.method": "novj",
+    "clonal_analysis.threads": 12,
+    "clonal_analysis.clones_bin_width": 0.02,
+    "clonal_analysis.max_memory_gb": 96
+  },
+  {
+    "clonal_analysis.airr_tsv": "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-RAMOS_light/changeo_igblast/S3987Nr2-RAMOS_light_db-pass_with_translation.tsv",
+    "clonal_analysis.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-RAMOS_light",
+    "clonal_analysis.name": "S3987Nr2-RAMOS_light",
+    "clonal_analysis.method": "novj",
+    "clonal_analysis.threads": 12,
+    "clonal_analysis.clones_bin_width": 0.02,
+    "clonal_analysis.max_memory_gb": 96
+  }
+]

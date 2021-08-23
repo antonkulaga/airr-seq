@@ -1,0 +1,9 @@
+{
+  "clonal_analysis.airr_tsv": "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-RAMOS_light/changeo_igblast/S3987Nr2-RAMOS_light_db-pass_with_translation.tsv",
+  "clonal_analysis.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-RAMOS_light",
+  "clonal_analysis.name": "S3987Nr2-RAMOS_light",
+  "clonal_analysis.method": "novj",
+  "clonal_analysis.threads": 12,
+  "clonal_analysis.clones_bin_width": 0.02,
+  "clonal_analysis.max_memory_gb": 96
+}
