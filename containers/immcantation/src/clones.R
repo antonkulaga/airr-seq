@@ -12,7 +12,7 @@ include("scoper")
 include("dplyr")
 
 doc <- "Usage:
-  clones.R analyze_clones [--name <name>] [--threads <threads>] [--binwidth <binwidth>] [--wd <wd>][--suffix <suffix>] <tsv> 
+  clones.R analyze_clones [--name <name>] [--threads <threads>] [--binwidth <binwidth>] [--wd <wd>][--suffix <suffix>] [--spectral_method <spectral_method>] <tsv> 
   clones.R analyze_diversity [--name <name>] [--wd <wd>] <clones_tsv>  
 
   Options:   
@@ -21,6 +21,7 @@ doc <- "Usage:
    -t --threads <threads> Number of threads [type: int] [default: 8]
    -b --binwidth Width of the bin in plotting [type: num] [default: 0.02]
    -s --suffix <suffix> [default: _with_clones].
+   -sm --spectral_method <spectral_method> [default: novj]
    -h --help     Show this screen."
 
 debug <- FALSE
@@ -46,6 +47,7 @@ tsv <- values$tsv
 name <- values$name
 binwidth <- as.numeric(values$binwidth)
 threads <- as.numeric(values$threads)
+spectral_method <- values$spectral_method
 
 clones_tsv <- values$clones_tsv
 analyze_clones <- values$analyze_clones
@@ -73,10 +75,10 @@ writeAnalysisTable <- function(table, filepath) {
 }
 
 computeSpectralClones <- function(
-    db, threads, verbose = TRUE) {
+    db, threads, spectralClones_method = "novj", verbose = TRUE) {
     
     results <- tryCatch({
-            scoper::spectralClones(db, "vj", verbose = verbose, nproc = threads)
+            scoper::spectralClones(db, spectralClones_method, verbose = verbose, nproc = threads)
             },
             warning = function(cond) {
                 iter_max_warning = 15000
@@ -87,7 +89,7 @@ computeSpectralClones <- function(
                 ))
                 scoper::spectralClones(
                     db,
-                    "vj",
+                    spectralClones_method,
                     verbose = TRUE, 
                     iter_max = iter_max_warning,
                     nstart = nstart_warning
@@ -102,15 +104,18 @@ if (analyze_clones == TRUE) {
     print(paste("starting spectral analyzis with ", threads, "threads"))
 
     # Clonal assignment using identical nucleotide sequences
-    results <- computeSpectralClones(db, threads, verbose=TRUE)
-
-    writeAnalysisTable(results@vjl_groups, build_filepath(name, "vjl_groups", "tsv"))
-
-    print(paste("writing spectral analyzes results", file.path(paste0(name, values$suffix, ".tsv"))))
-    writeChangeoDb(results@db, file.path(paste0(name, values$suffix, ".tsv")))
-
-    print(paste("writing spectral analyzes picture", file.path(paste0(name, values$suffix, ".svg"))))
-    svg(file = paste0(name, values$suffix, ".svg"), width = 800, height = 600)
+    results <- computeSpectralClones(db, threads, spectral_method, verbose=TRUE)
+    
+    groups_fp = build_filepath(name, paste0(spectral_method, "_groups"), "tsv")
+    writeAnalysisTable(results@vjl_groups, groups_fp)
+    
+    changeo_fp = file.path(paste0(name, paste0("_", spectral_method, values$suffix), ".tsv"))
+    print(paste("writing spectral analyzes results", changeo_fp))
+    writeChangeoDb(results@db, changeo_fp)
+    
+    plot_fp = file.path(paste0(name, paste0("_", spectral_method, values$suffix), ".svg"))
+    print(paste("writing spectral analyzes picture", plot_fp))
+    svg(file = plot_fp, width = 800, height = 600)
     if (binwidth > 0) {
         print(paste("binwidth is", binwidth))
       plot(results, binwidth = binwidth)
