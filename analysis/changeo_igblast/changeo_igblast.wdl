@@ -70,7 +70,8 @@ task igblast {
         mkdir -p igblast
         AssignGenes.py igblast -s ~{fasta} \
         -b /usr/local/share/igblast --organism human --loci ig \
-        --format blast --outdir igblast --nproc ~{threads}
+        --format blast --nproc ~{threads}  # --outdir igblast
+        mv ~{basename(fasta, ".fasta")}_igblast.fmt7 igblast
     }
     runtime {
         docker: "immcantation/suite:devel"
