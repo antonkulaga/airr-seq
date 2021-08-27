@@ -132,6 +132,11 @@ task presto {
         File results = output_dir
         File AP_table = output_dir + "/" + "AP_table.tab"
         File out = output_dir + "/" + name + "_atleast-" + dupcount + ".fastq"
+        File under_dupcount = output_dir + "/" + name + "_under-" + dupcount + ".fastq"
         File headers = output_dir + "/" + name + "_atleast-" + dupcount + "_headers.tab"
+        File primer_pass_1 = output_dir + "/" + name + ".1_primers-pass.fastq"
+        File primer_pass_2 = output_dir + "/" + name + ".2_primers-pass.fastq"
+        File pair_pass_1 = output_dir + "/" + name + ".1_primers-pass_pair-pass.fastq"
+        File pair_pass_2 = output_dir + "/" + name + ".2_primers-pass_pair-pass.fastq"
     }
 }
