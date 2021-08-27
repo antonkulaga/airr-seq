@@ -1,0 +1,16 @@
+{
+    "presto.reads": [
+        "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-PBMC1_heavy/subsamples/sample_1000/S3987Nr1-PBMC_heavy_sample2-n1000.1.fastq",
+        "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-PBMC1_heavy/subsamples/sample_1000/S3987Nr1-PBMC_heavy_sample2-n1000.2.fastq"
+    ],
+    "presto.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-PBMC1_heavy/subsamples/sample_1000",
+    "presto.name": "S3987Nr1-PBMC_heavy_sample2-n1000",
+    "presto.coordinates": "illumina",
+    "presto.IGHC_fasta": "/data/samples/AIRR-Seq/OURS/IGHC/IGHC-short.fasta",
+    "presto.threads": 12,
+    "presto.min_length": 230,
+    "presto.min_quality": 25,
+    "presto.start_v": 0,
+    "presto.min_dupcount": 2,
+    "presto.max_memory_gb": 96
+}
