@@ -68,9 +68,8 @@ task igblast {
     }
     command {
         mkdir -p igblast
-        AssignGenes.py igblast -s ~{fasta} \
-        -b /usr/local/share/igblast --organism human --loci ig \
-        --format blast --nproc ~{threads}  # --outdir igblast
+        echo "~{basename(fasta, ".fasta")}_igblast.fmt7"
+        AssignGenes.py igblast -s ~{fasta} -o ~{basename(fasta, ".fasta")}_igblast.fmt7 -b /usr/local/share/igblast --organism human --loci ig --format blast --nproc ~{threads}
         mv ~{basename(fasta, ".fasta")}_igblast.fmt7 igblast
     }
     runtime {
