@@ -1,13 +1,20 @@
 {
-  "irepertoire.threads": 12,
-  "irepertoire.name": "S3987Nr1-PBMC_heavy",
   "irepertoire.reads": [
-    "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-PBMC_heavy/subsamples/S3987Nr1-PBMC_heavy-1_sample2-n1000.fastq",
-    "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-PBMC_heavy/subsamples/S3987Nr1-PBMC_heavy-2_sample2-n1000.fastq"
+    "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-PBMC1_heavy/subsamples/sample_1000/S3987Nr1-PBMC_heavy_sample2-n1000.1.fastq",
+    "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-PBMC1_heavy/subsamples/sample_1000/S3987Nr1-PBMC_heavy_sample2-n1000.2.fastq"
   ],
-  "irepertoire.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-PBMC_heavy/subsamples/sample_1000",
+  "irepertoire.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-PBMC1_heavy/subsamples/sample_1000",
+  "irepertoire.name": "S3987Nr1-PBMC_heavy_sample2-n1000",
+  "irepertoire.IGHC_fasta": "/data/samples/AIRR-Seq/OURS/IGHC/IGHC-short.fasta",
+  "irepertoire.species": "human",
   "irepertoire.coordinates": "illumina",
-  "irepertoire.min_length": 196,
+  "irepertoire.threads": 12,
+  "irepertoire.min_reads_per_ig": 2,
+  "irepertoire.min_length": 230,
   "irepertoire.min_quality": 25,
-  "irepertoire.start_v": 0
+  "irepertoire.start_v": 0,
+  "irepertoire.min_dupcount": 2,
+  "irepertoire.clones_bin_width": 0.02,
+  "irepertoire.max_memory_gb": 96,
+  "irepertoire.spectral_method": "novj"
 }

@@ -5,6 +5,7 @@
   ],
   "irepertoire.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-RAMOS_heavy",
   "irepertoire.name": "S3987Nr2-RAMOS_heavy",
+  "irepertoire.IGHC_fasta": "/data/samples/AIRR-Seq/OURS/IGHC/IGHC-short.fasta",
   "irepertoire.species": "human",
   "irepertoire.coordinates": "illumina",
   "irepertoire.threads": 12,
