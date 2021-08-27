@@ -124,7 +124,8 @@ task presto {
     }
 
     runtime {
-        docker: "immcantation/suite:devel"
+        # docker: "immcantation/suite:devel"
+        docker: "immcantation/suite:4.2.0"
         docker_memory: "~{max_memory}G"
         docker_cpu: "~{NPROC+1}"
     }
