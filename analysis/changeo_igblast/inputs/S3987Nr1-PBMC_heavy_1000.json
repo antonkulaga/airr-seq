@@ -1,0 +1,6 @@
+{
+    "changeo_igblast.fastq": "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-PBMC_heavy/subsamples/sample_1000/presto/S3987Nr1-PBMC_heavy_sample2-n1000_atleast-2.fastq",
+    "changeo_igblast.threads": 12,
+    "changeo_igblast.name": "S3987Nr1-PBMC_heavy_sample2-n1000",
+    "changeo_igblast.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-PBMC_heavy/subsamples/sample_1000"
+}
