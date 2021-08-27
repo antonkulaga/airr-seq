@@ -16,7 +16,7 @@ workflow irepertoire{
         String destination
         String name
 
-        File IGHC_fasta = ""
+        File? IGHC_fasta
 
         String species = "human"
 

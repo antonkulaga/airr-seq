@@ -10,7 +10,7 @@ workflow presto{
         String destination
         String name
 
-        File IGHC_fasta
+        File? IGHC_fasta
 
         String coordinates = "illumina" #sra
         Int threads = 12
@@ -45,7 +45,7 @@ task presto {
         Array[File] reads
         String coordinates = "illumina"
 
-        File IGHC_fasta = ""
+        File? IGHC_fasta
 
         Int NPROC = 12
         Int collapse_max_missing = 20
@@ -97,7 +97,8 @@ task presto {
         ParseLog.py -l FS_quality.log -f ID QUALITY
 
         # Call constant region (for IGH) and furter processing
-        if [ -n ~{IGHC_fasta} ]
+        # if [ -n ~{IGHC_fasta} ]
+        if ~{defined(IGHC_fasta)}
         then
 
             # C_CALL for IGH
