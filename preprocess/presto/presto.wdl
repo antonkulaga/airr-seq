@@ -33,6 +33,7 @@ workflow presto{
 
     output {
         File presto_results = copy_presto.out[0]
+        File out = presto.out
     }
 
 }

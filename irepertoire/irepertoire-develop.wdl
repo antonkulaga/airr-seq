@@ -5,7 +5,7 @@ import "https://raw.githubusercontent.com/antonkulaga/bioworkflows/main/common/f
 #production version
 import "https://raw.githubusercontent.com/antonkulaga/airr-seq/main/analysis/changeo_igblast.wdl" as changeo
 import "https://raw.githubusercontent.com/ursueugen/airr-seq/main/analysis/clonal_analysis/clonal_analysis.wdl" as clonal
-import "https://raw.githubusercontent.com/ursueugen/airr-seq/main/analysis/preprocess/presto/presto.wdl" as presto
+import "https://raw.githubusercontent.com/ursueugen/airr-seq/main/preprocess/presto/presto.wdl" as presto
 
 
 workflow irepertoire{
@@ -43,12 +43,12 @@ workflow irepertoire{
     call presto.presto as presto {
         input: name = name, output_dir = "presto",
         reads = reads, NPROC = threads, min_quality = min_quality, min_length = min_length, start_v = start_v, dupcount = min_dupcount,
-        coordinates = coordinates, max_memory = max_memory_gb, IGHC_fasta = IGHC_fasta
+        coordinates = coordinates, max_memory = max_memory_gb, IGHC_fasta = IGHC_fasta, destination = destination
     }
 
-    call files.copy as copy_presto { 
-        input: destination = destination, files = [presto.results]
-    }
+    # call files.copy as copy_presto { 
+    #     input: destination = destination, files = [presto.results]
+    # }
     
     call changeo.changeo_igblast as igblast {
         input: fastq = presto.out, threads = threads, name = name, destination = destination
