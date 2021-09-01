@@ -20,7 +20,7 @@ workflow changeo_igblast {
         input: fasta = fastq_conversion.out, threads = threads
     }
 
-    call changeo{
+    call changeo {
         input: fasta = fastq_conversion.out, fmt7 = igblast.fmt7, name = name
     }
 
@@ -99,6 +99,12 @@ task changeo {
         -r /usr/local/share/germlines/imgt/human/vdj/ --outdir ~{outdir} --outname ~{name} --extended --format ~{format}
 
         ParseDb.py select -d  ~{outdir}/~{name}_db-pass.tsv -f productive -u T TRUE --outname ~{name}_f
+
+        # Adds germline_alignment_d_mask
+        CreateGermlines.py -d ~{outdir}/~{name}_db-pass.tsv \
+            --outdir ~{outdir} --format ~{format} \
+            -r /usr/local/share/germlines/imgt/human/vdj/ \
+            -g full dmask
     }
 
     runtime {
@@ -107,7 +113,7 @@ task changeo {
 
     output {
         File out = outdir
-        File airr_tsv = outdir + "/" + name + "_db-pass.tsv"
+        File airr_tsv = outdir + "/" + name + "_db-pass_germ-pass.tsv"
         File functional = outdir + "/" + name + "_f_parse-select.tsv"
     }
 

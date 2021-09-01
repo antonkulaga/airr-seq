@@ -8,7 +8,7 @@ import "https://raw.githubusercontent.com/ursueugen/airr-seq/main/analysis/clona
 import "https://raw.githubusercontent.com/ursueugen/airr-seq/main/preprocess/presto/presto.wdl" as presto
 
 
-workflow irepertoire{
+workflow irepertoire {
 
     input {
         Array[File] reads

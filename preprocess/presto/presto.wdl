@@ -76,7 +76,7 @@ task presto {
         ln -s ~{reads[1]} ~{basenames[1]}.fastq
 
         # Mask primers and infer constant region
-        MaskPrimers.py extract -s ~{basenames[0]}.fastq --len ~{const_length} --mode mask --pf CPRIMER  # --mode trim
+        MaskPrimers.py extract -s ~{basenames[0]}.fastq --len ~{const_length} --mode mask --pf CPRIMER
         MaskPrimers.py extract -s ~{basenames[1]}.fastq --start ~{start_v} ~{if(start_v>0) then "--barcode --bf V_barcode" else ""} --len ~{variable_length} --mode cut --pf VPRIMER
         PairSeq.py -1 ~{basenames[1]}_primers-pass.fastq -2 ~{basenames[0]}_primers-pass.fastq  --1f VPRIMER ~{if(start_v>0) then "V_barcode" else ""} --2f CPRIMER
 
@@ -97,7 +97,6 @@ task presto {
         ParseLog.py -l FS_quality.log -f ID QUALITY
 
         # Call constant region (for IGH) and furter processing
-        # if [ -n ~{IGHC_fasta} ]
         if ~{defined(IGHC_fasta)}
         then
 
