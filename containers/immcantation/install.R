@@ -4,7 +4,8 @@ install.packages("BiocManager")
 to_install <- c(
   "tidyverse", # The tidyverse is an opinionated collection of R packages designed for data science.
   "plotly", #charts
-  "docopt" #for CLI
+  "docopt", #for CLI
+  "magick" # for image processing
 )
 install.packages(to_install, dependencies = TRUE)
 

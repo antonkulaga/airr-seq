@@ -4,7 +4,7 @@ RUN python3 -m pip install jupyterlab jupyterlab-lsp jupyterlab_code_formatter
 RUN pip install papermill
 #RUN dnf -y install 'dnf-command(copr)' && dnf -y copr enable iucar/cran && dnf -y install R-CoprManager
 ADD install.R /tmp/
-RUN sudo yum -y install libjpeg*
+RUN sudo yum -y install libjpeg* ImageMagick-c++-devel
 RUN R -f /tmp/install.R
 USER magus
 WORKDIR /home/magus/notebooks

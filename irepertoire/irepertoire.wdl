@@ -64,10 +64,7 @@ workflow irepertoire{
         files = [
             analyze_clones.out,
             analyze_clones.histogram,
-            # analyze_clones.counts,
             analyze_clones.vjl_groups
-            # analyze_clones.abundance_curve_chart,
-            # analyze_clones.abundance_curve_tsv
         ]
     }
 
@@ -92,7 +89,6 @@ workflow irepertoire{
         File changeo_results = igblast.out
         File clones = copy_clones.destination_folder
         File diversity = copy_diversity.destination_folder
-        #File clonal = clonal_analysis.out
     }
 
 }
@@ -123,8 +119,6 @@ task presto {
         String name
         Array[File] reads
         String coordinates = "illumina"
-        #File constant
-        #File variable
 
         Int NPROC = 12
         Int collapse_max_missing = 20
@@ -248,10 +242,7 @@ task analyze_clones {
     output {
         File out = name + suffix + ".tsv"
         File histogram = name + suffix + ".png"
-        # File counts = name + "_clone_counts.tsv"
         File vjl_groups = name+"_vjl_groups.tsv"
-        # File abundance_curve_tsv = name+"_abundance_curve.tsv"
-        # File abundance_curve_chart = name+"_abundance_curve.png"
     }
 }
 

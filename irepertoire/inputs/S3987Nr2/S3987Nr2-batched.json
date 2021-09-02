@@ -1,11 +1,11 @@
 [
     {
         "irepertoire.reads": [
-          "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-PBMC1_heavy/S3987Nr1-PBMC1_heavy.1.fastq",
-          "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-PBMC1_heavy/S3987Nr1-PBMC1_heavy.2.fastq"
+          "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-PBMC1_heavy/S3987Nr2-PBMC1_heavy.1.fastq",
+          "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-PBMC1_heavy/S3987Nr2-PBMC1_heavy.2.fastq"
         ],
-        "irepertoire.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-PBMC1_heavy",
-        "irepertoire.name": "S3987Nr1-PBMC1_heavy",
+        "irepertoire.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-PBMC1_heavy",
+        "irepertoire.name": "S3987Nr2-PBMC1_heavy",
         "irepertoire.IGHC_fasta": "/data/samples/AIRR-Seq/OURS/IGHC/IGHC-short.fasta",
         "irepertoire.species": "human",
         "irepertoire.coordinates": "illumina",
@@ -21,11 +21,11 @@
       },
       {
         "irepertoire.reads": [
-          "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-PBMC1_light/S3987Nr1-PBMC1_light.1.fastq",
-          "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-PBMC1_light/S3987Nr1-PBMC1_light.2.fastq"
+          "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-PBMC1_light/S3987Nr2-PBMC1_light.1.fastq",
+          "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-PBMC1_light/S3987Nr2-PBMC1_light.2.fastq"
         ],
-        "irepertoire.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-PBMC1_light",
-        "irepertoire.name": "S3987Nr1-PBMC1_light",
+        "irepertoire.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-PBMC1_light",
+        "irepertoire.name": "S3987Nr2-PBMC1_light",
         "irepertoire.species": "human",
         "irepertoire.coordinates": "illumina",
         "irepertoire.threads": 12,
@@ -38,13 +38,13 @@
         "irepertoire.max_memory_gb": 96,
         "irepertoire.spectral_method": "novj"
       },
-      { 
+      {
         "irepertoire.reads": [
-          "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-RAMOS_heavy/S3987Nr1-RAMOS_heavy.1.fastq",
-          "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-RAMOS_heavy/S3987Nr1-RAMOS_heavy.2.fastq"
+          "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-RAMOS_heavy/S3987Nr2-RAMOS_heavy.1.fastq",
+          "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-RAMOS_heavy/S3987Nr2-RAMOS_heavy.2.fastq"
         ],
-        "irepertoire.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-RAMOS_heavy",
-        "irepertoire.name": "S3987Nr1-RAMOS_heavy",
+        "irepertoire.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-RAMOS_heavy",
+        "irepertoire.name": "S3987Nr2-RAMOS_heavy",
         "irepertoire.IGHC_fasta": "/data/samples/AIRR-Seq/OURS/IGHC/IGHC-short.fasta",
         "irepertoire.species": "human",
         "irepertoire.coordinates": "illumina",
@@ -58,13 +58,13 @@
         "irepertoire.max_memory_gb": 96,
         "irepertoire.spectral_method": "novj"
       },
-      {  
+      {
         "irepertoire.reads": [
-          "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-RAMOS_light/S3987Nr1-RAMOS_light.1.fastq",
-          "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-RAMOS_light/S3987Nr1-RAMOS_light.2.fastq"
+          "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-RAMOS_light/S3987Nr2-RAMOS_light.1.fastq",
+          "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-RAMOS_light/S3987Nr2-RAMOS_light.2.fastq"
         ],
-        "irepertoire.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr1/S3987Nr1-RAMOS_light",
-        "irepertoire.name": "S3987Nr1-RAMOS_light",
+        "irepertoire.destination": "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-RAMOS_light",
+        "irepertoire.name": "S3987Nr2-RAMOS_light",
         "irepertoire.species": "human",
         "irepertoire.coordinates": "illumina",
         "irepertoire.threads": 12,
@@ -76,6 +76,5 @@
         "irepertoire.clones_bin_width": 0.02,
         "irepertoire.max_memory_gb": 96,
         "irepertoire.spectral_method": "novj"
-      }      
-      
+      }
 ]

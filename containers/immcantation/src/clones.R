@@ -12,7 +12,7 @@ include("scoper")
 include("dplyr")
 
 doc <- "Usage:
-  clones.R analyze_clones [--name <name>] [--threads <threads>] [--binwidth <binwidth>] [--wd <wd>][--suffix <suffix>] <tsv> 
+  clones.R analyze_clones [--name <name>] [--threads <threads>] [--binwidth <binwidth>] [--wd <wd>][--suffix <suffix>] [--spectral_method <spectral_method>] <tsv> 
   clones.R analyze_diversity [--name <name>] [--wd <wd>] <clones_tsv>  
 
   Options:   
@@ -21,6 +21,7 @@ doc <- "Usage:
    -t --threads <threads> Number of threads [type: int] [default: 8]
    -b --binwidth Width of the bin in plotting [type: num] [default: 0.02]
    -s --suffix <suffix> [default: _with_clones].
+   -sm --spectral_method <spectral_method> [default: novj]
    -h --help     Show this screen."
 
 debug <- FALSE
@@ -46,6 +47,7 @@ tsv <- values$tsv
 name <- values$name
 binwidth <- as.numeric(values$binwidth)
 threads <- as.numeric(values$threads)
+spectral_method <- values$spectral_method
 
 clones_tsv <- values$clones_tsv
 analyze_clones <- values$analyze_clones
@@ -53,7 +55,7 @@ analyze_diversity <- values$analyze_diversity
 
 # Helper functions
 build_filepath <- function(name, suffix, type="tsv") {
-    if (type %in% c("tsv", "png")) {
+    if (type %in% c("tsv", "svg")) {
         return(
             file.path(paste0(name, "_", suffix, ".", type))
         )
@@ -73,10 +75,10 @@ writeAnalysisTable <- function(table, filepath) {
 }
 
 computeSpectralClones <- function(
-    db, threads, verbose = TRUE) {
+    db, threads, spectralClones_method = "novj", verbose = TRUE) {
     
     results <- tryCatch({
-            scoper::spectralClones(db, "vj", verbose = verbose, nproc = threads)
+            scoper::spectralClones(db, spectralClones_method, verbose = verbose, nproc = threads)
             },
             warning = function(cond) {
                 iter_max_warning = 15000
@@ -87,7 +89,7 @@ computeSpectralClones <- function(
                 ))
                 scoper::spectralClones(
                     db,
-                    "vj",
+                    spectralClones_method,
                     verbose = TRUE, 
                     iter_max = iter_max_warning,
                     nstart = nstart_warning
@@ -102,15 +104,18 @@ if (analyze_clones == TRUE) {
     print(paste("starting spectral analyzis with ", threads, "threads"))
 
     # Clonal assignment using identical nucleotide sequences
-    results <- computeSpectralClones(db, threads, verbose=TRUE)
-
-    writeAnalysisTable(results@vjl_groups, build_filepath(name, "vjl_groups", "tsv"))
-
-    print(paste("writing spectral analyzes results", file.path(paste0(name, values$suffix, ".tsv"))))
-    writeChangeoDb(results@db, file.path(paste0(name, values$suffix, ".tsv")))
-
-    print(paste("writing spectral analyzes picture", file.path(paste0(name, values$suffix, ".png"))))
-    png(file = paste0(name, values$suffix, ".png"), width = 800, height = 600)
+    results <- computeSpectralClones(db, threads, spectral_method, verbose=TRUE)
+    
+    groups_fp = build_filepath(name, paste0(spectral_method, "_groups"), "tsv")
+    writeAnalysisTable(results@vjl_groups, groups_fp)
+    
+    changeo_fp = file.path(paste0(name, paste0("_", spectral_method, values$suffix), ".tsv"))
+    print(paste("writing spectral analyzes results", changeo_fp))
+    writeChangeoDb(results@db, changeo_fp)
+    
+    plot_fp = file.path(paste0(name, paste0("_", spectral_method, values$suffix), ".svg"))
+    print(paste("writing spectral analyzes picture", plot_fp))
+    svg(file = plot_fp, width = 800, height = 600)
     if (binwidth > 0) {
         print(paste("binwidth is", binwidth))
       plot(results, binwidth = binwidth)
@@ -165,7 +170,7 @@ computeCoverage <- function(counts) {
 
 plotAbundancy <- function(abundanceCurve, name, filepath, debug) {
     sample_colors <- c(`-1h` = "seagreen", `+7d` = "steelblue")
-    png(file = filepath, width = 800, height = 600)
+    svg(file = filepath, width = 800, height = 600)
     # Plots a rank abundance curve of the relative clonal abundances
     plot(abundanceCurve, colors = sample_colors, legend_title = name)
     if (debug == TRUE) {
@@ -178,12 +183,12 @@ computeAbundancy <- function(clones_results, name, debug) {
     print("Calculates abundancy with 95% confidence interval via 200 bootstrap realizations")
     abundanceCurve <- alakazam::estimateAbundance(clones_results, ci = 0.95, nboot = 200, clone = "clone_id", progress = TRUE)
     writeAnalysisTable(abundanceCurve@abundance, build_filepath(name, "abundance_curve", "tsv"))
-    plotAbundancy(abundanceCurve, name, build_filepath(name, "abundancy_curve", "png"), debug)
+    plotAbundancy(abundanceCurve, name, build_filepath(name, "abundancy_curve", "svg"), debug)
     return(abundanceCurve)
 }
 
 plotDiversity <- function(diversity, filepath, debug) {
-    png(file = filepath, width = 800, height = 600)
+    svg(file = filepath, width = 800, height = 600)
     plot(diversity)
     if (debug == TRUE) {
       dev.off()
@@ -194,7 +199,7 @@ plotDiversity <- function(diversity, filepath, debug) {
 computeDiversity <- function(abundancyCurve, name, debug) {
     diversity <- alakazam::alphaDiversity(abundancyCurve)
     writeAnalysisTable(diversity@diversity, build_filepath(name, "diversity", "tsv"))
-    plotDiversity(diversity, build_filepath(name, "diversity", "png"), debug)
+    plotDiversity(diversity, build_filepath(name, "diversity", "svg"), debug)
     return(diversity)
 }
 
@@ -202,6 +207,14 @@ if (analyze_diversity == TRUE) {
     results <- alakazam::readChangeoDb(clones_tsv)
     counts <- computeCloneCounts(results, name)
     computeCoverage(counts)
-    abundanceCurve <- computeAbundancy(results, name, debug)
-    diversity <- computeDiversity(abundanceCurve, name, debug)
+    
+    tryCatch({
+        abundanceCurve <- computeAbundancy(results, name, debug)
+        diversity <- computeDiversity(abundanceCurve, name, debug)
+        },
+        error = function(cond) {
+            print(cond)
+            print("Further execution halted.")
+        }
+    )
 }
