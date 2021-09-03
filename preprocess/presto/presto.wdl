@@ -102,7 +102,7 @@ task presto {
 
             # C_CALL for IGH
             printf "  %2d: %-*s $(date +'%H:%M %D')\n" $((++STEP)) 24 "C_CALL"
-            MaskPrimers.py align -s "~{name}_length-pass.fastq" -p ~{IGHC_fasta} --revpr --skiprc --maxerror 0.3 --mode cut --outname "~{name}_c_call" --pf C_CALL
+            MaskPrimers.py align -s "~{name}_length-pass.fastq" -p ~{IGHC_fasta} --revpr --skiprc --maxerror 0.3 --mode tag --outname "~{name}_c_call" --pf C_CALL
             mv "~{name}_c_call_primers-pass.fastq" "~{name}_c_called.fastq"
             
              # Remove duplicate sequences
