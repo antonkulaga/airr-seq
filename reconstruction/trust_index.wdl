@@ -34,6 +34,6 @@ task trust_index {
     }
 
     runtime {
-        docker: "quay.io/biocontainers/trust4:1.0.4--h2e03b76_0"
+        docker: "quay.io/biocontainers/trust4:1.0.5.1--h2e03b76_0"
     }
 }
