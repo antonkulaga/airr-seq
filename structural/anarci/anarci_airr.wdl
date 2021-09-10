@@ -1,7 +1,7 @@
 version development
 import "https://raw.githubusercontent.com/antonkulaga/bioworkflows/main/common/files.wdl" as files
 
-import "https://raw.githubusercontent.com/antonkulaga/airr-seq/main/anarci/anarci.wdl" as mother_of_order
+import "https://raw.githubusercontent.com/antonkulaga/airr-seq/main/structural/anarci/anarci.wdl" as mother_of_order
 
 workflow anarci_airr {
     input {
@@ -14,7 +14,7 @@ workflow anarci_airr {
 
         String name
         Int threads = 12
-        String chains_restriction
+        String? chains_restriction
         Array[String] meta_fields = ["duplicate_count", "clone_id"]
         Boolean assign_germline = true
     }

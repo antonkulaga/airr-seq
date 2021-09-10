@@ -1,0 +1,9 @@
+{
+  "anarci.name": "ADQ_chains",
+  "anarci.fasta": "/data/samples/AIRR-Seq/validation/ADQ_chains.fasta",
+  "anarci.scheme": "martin",
+  "anarci.species": "human",
+  "anarci.threads": 12,
+  "anarci.assign_germline": false,
+  "anarci.destination": "/data/samples/AIRR-Seq/validation"
+}

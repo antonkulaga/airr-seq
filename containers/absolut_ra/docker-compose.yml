@@ -1,0 +1,12 @@
+version: '3'
+services:
+  absolut:
+    image: "quay.io/comp-bio-aging/absolut:latest"
+    entrypoint: /opt/graphdb/dist/bin/graphdb
+    environment:
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /data:/data
+    network_mode: host
+    command:  Absolut discretize  [PDB_ID Chains_of_interest]  [Resolution (5.25 default)]  [type_Discretization (CA / CoM / FuC default)]
