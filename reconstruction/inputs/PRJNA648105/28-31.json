@@ -1,0 +1,7 @@
+{
+  "in_star_we_trust.title": "PD1+ B cells in Rheumatoid Arthritis (RA) Patients (human), primary cultures",
+  "in_star_we_trust.experiment_folder": "/data/samples/AIRR-Seq/reconstructions/RA",
+  "in_star_we_trust.runs": ["SRR12304931","SRR12304930","SRR12304929","SRR12304928"],
+  "in_star_we_trust.star_index_dir": "/data/indexes/star/2.7.9a/Homo_sapiens/GRCh38",
+  "in_star_we_trust.imgt_reference": "/data/indexes/IMGT/vdj.fa"
+}
