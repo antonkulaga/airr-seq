@@ -1,0 +1,7 @@
+{
+  "absolut_discretize.resolution": 5.25,
+  "absolut_discretize.destination": "/data/samples/AIRR-Seq/reconstructions/RA/bulk_reps_RA/absolut/discretize/5xmh",
+  "absolut_discretize.pos": "FuC",
+  "absolut_discretize.chains": "AB",
+  "absolut_discretize.pdb": "5xmh"
+}

@@ -1,0 +1,7 @@
+{
+  "absolut_rep.antigen_structures": "/data/samples/AIRR-Seq/OURS/Absolut_analysis/top_2000/SURDL1d142377287b5e668884c85e46cc59eb-10-11-8e54698c924e4627aeb1213bcc3114c1Structures.txt",
+  "absolut_rep.antigen": "1ADQ_A",
+  "absolut_rep.sequences": "/data/samples/AIRR-Seq/OURS/IREPERTOIRE/S3987Nr2/PBMC/PBMCs_heavy/absolut/input.tsv",
+  "absolut_rep.threads": 16,
+  "absolut_rep.destination": "/data/samples/AIRR-Seq/OURS/IREPERTOIRE/S3987Nr2/PBMC/PBMCs_heavy/absolut/predictions"
+}

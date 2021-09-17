@@ -1,0 +1,16 @@
+{
+  "absolut_rep_many.sequences": [
+    "/data/samples/AIRR-Seq/reconstructions/RA/bulk_reps_RA/absolut/PRJNA648105_SRX8807196.tsv",
+    "/data/samples/AIRR-Seq/reconstructions/RA/bulk_reps_RA/absolut/PRJNA648105_SRX8807195.tsv",
+    "/data/samples/AIRR-Seq/reconstructions/RA/bulk_reps_RA/absolut/PRJNA648105_SRX8807192.tsv",
+    "/data/samples/AIRR-Seq/reconstructions/RA/bulk_reps_RA/absolut/PRJNA648105_SRX8807191.tsv",
+    "/data/samples/AIRR-Seq/reconstructions/RA/bulk_reps_RA/absolut/PRJNA648105_SRX8807190.tsv",
+    "/data/samples/AIRR-Seq/reconstructions/RA/bulk_reps_RA/absolut/PRJNA648105_SRX8807189.tsv",
+    "/data/samples/AIRR-Seq/reconstructions/RA/bulk_reps_RA/absolut/PRJNA648105_SRX8807188.tsv",
+    "/data/samples/AIRR-Seq/reconstructions/RA/bulk_reps_RA/absolut/PRJNA648105_SRX8807187.tsv"
+  ],
+  "absolut_rep_many.threads": 3,
+  "absolut_rep_many.antigen": "1ADQ_A",
+  "absolut_rep_many.antigen_structures": "/data/samples/AIRR-Seq/OURS/Absolut_analysis/top_2000/SURDL1d142377287b5e668884c85e46cc59eb-10-11-8e54698c924e4627aeb1213bcc3114c1Structures.txt",
+  "absolut_rep_many.destination": "/data/samples/AIRR-Seq/reconstructions/RA/bulk_reps_RA/absolut/predictions"
+}
