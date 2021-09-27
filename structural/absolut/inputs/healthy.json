@@ -1,11 +1,11 @@
 {
 "absolut_rep_many.sequences": [
-  "/data/samples/AIRR-Seq/ireceptor/HEALTHY/absolut/ir_2021-09-14_1327_6140a340f3f66.tsv",
-  "/data/samples/AIRR-Seq/ireceptor/HEALTHY/absolut/ir_2021-09-14_1327_6140a352a8409.tsv",
-  "/data/samples/AIRR-Seq/ireceptor/HEALTHY/absolut/ir_2021-09-14_1328_6140a3754d4ba.tsv",
-  "/data/samples/AIRR-Seq/ireceptor/HEALTHY/absolut/ir_2021-09-14_1325_6140a2dc33462.tsv",
-  "/data/samples/AIRR-Seq/ireceptor/HEALTHY/absolut/ir_2021-09-14_1326_6140a30cf0ee7.tsv",
-  "/data/samples/AIRR-Seq/ireceptor/HEALTHY/absolut/ir_2021-09-14_1327_6140a3292f728.tsv"
+  "/data/samples/AIRR-Seq/ireceptor/HEALTHY/absolut/healthy_ir_2021-09-14_1326_6140a30cf0ee7.tsv",
+  "/data/samples/AIRR-Seq/ireceptor/HEALTHY/absolut/healthy_ir_2021-09-14_1325_6140a2dc33462.tsv",
+  "/data/samples/AIRR-Seq/ireceptor/HEALTHY/absolut/healthy_ir_2021-09-14_1328_6140a3754d4ba.tsv",
+  "/data/samples/AIRR-Seq/ireceptor/HEALTHY/absolut/healthy_ir_2021-09-14_1327_6140a3292f728.tsv",
+  "/data/samples/AIRR-Seq/ireceptor/HEALTHY/absolut/healthy_ir_2021-09-14_1327_6140a340f3f66.tsv",
+  "/data/samples/AIRR-Seq/ireceptor/HEALTHY/absolut/healthy_ir_2021-09-14_1327_6140a352a8409.tsv"
 ],
 "absolut_rep_many.threads": 3,
 "absolut_rep_many.antigen": "1ADQ_A",
