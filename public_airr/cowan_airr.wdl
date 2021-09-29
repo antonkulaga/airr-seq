@@ -88,7 +88,7 @@ task presto {
         Int max_memory
     }
 
-    Array[String] basenames = [basename(reads[0], ".fastq.gz"),basename(reads[1],".fastq.gz")]
+    Array[String] basenames = [basename(reads[0], ".fastq"),basename(reads[1],".fastq")]
 
     command {
         # Make output directory and empty log files
@@ -99,10 +99,8 @@ task presto {
         echo -e "START"
         STEP=0
 
-        ln -s ~{reads[0]} ~{basenames[0]}.fastq.gz
-        ln -s ~{reads[1]} ~{basenames[1]}.fastq.gz
-
-        gunzip -f ~{basenames[0]}.fastq.gz ~{basenames[1]}.fastq.gz
+        ln -s ~{reads[0]} ~{basenames[0]}.fastq
+        ln -s ~{reads[1]} ~{basenames[1]}.fastq
 
         # Assemble paired ends via mate-pair alignment
         printf "  %2d: %-*s $(date +'%H:%M %D')\n" $((++STEP)) 24 "AssemblePairs align"
