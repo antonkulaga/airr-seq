@@ -1,91 +1,8 @@
 version development
 
-import "https://raw.githubusercontent.com/antonkulaga/bioworkflows/main/common/files.wdl" as files
-
-#production version
-import "https://raw.githubusercontent.com/antonkulaga/airr-seq/main/analysis/changeo_igblast/changeo_igblast.wdl" as changeo
-import "https://raw.githubusercontent.com/antonkulaga/airr-seq/main/analysis/clonal_analysis/clonal_analysis.wdl" as clonal
-
-
-workflow irepertoire{
-
+workflow presto_irepertoire {
     input {
-        Array[File] reads
 
-        String destination
-        String name
-
-        String species = "human"
-
-        String coordinates = "illumina" #sra
-        Int threads = 12
-        Int min_reads_per_ig = 2
-        Int min_length = 196
-        Int min_quality = 20
-        Int start_v = 10
-        Int min_dupcount = 2
-        Float clones_bin_width = 0.02
-        Int max_memory_gb = 96
-    }
-
-    call fastqc {
-        input: output_dir = "fastqc_results", reads = reads
-    }
-
-    call files.copy as copy_fastqc {
-        input: destination = destination, files = [fastqc.results]
-    }
-
-    call presto {
-        input: name = name, output_dir = "presto",
-        reads = reads, NPROC = threads, min_quality = min_quality, min_length = min_length, start_v = start_v, dupcount = min_dupcount,
-        coordinates = coordinates, max_memory = max_memory_gb
-    }
-
-    call files.copy as copy_presto { 
-        input: destination = destination, files = [presto.results]
-    }
-    
-    call changeo.changeo_igblast as igblast {
-        input: fastq = presto.out, threads = threads, name = name, destination = destination
-    }
-
-    call clonal.clonal_analysis as clonal_analysis {
-            input:
-                airr_tsv =igblast.out,
-                destination = destination,
-                name = name,
-                threads = threads,
-                clones_bin_width = clones_bin_width,
-                max_memory_gb = max_memory_gb
-            }
-
-    output {
-        File presto_results = copy_presto.out[0]
-        File changeo_results = igblast.out
-        File clones = clonal_analysis.clones
-        File diversity = clonal_analysis.diversity
-    }
-
-}
-
-task fastqc {
-    input {
-        String output_dir = "fastqc_results"
-        Array[File] reads
-    }
-
-    command {
-        mkdir -p ~{output_dir}
-        fastqc --outdir ~{output_dir} ~{reads[0]} ~{reads[1]}
-    }
-
-    runtime {
-        docker: "biocontainers/fastqc:v0.11.9_cv8"
-    }
-
-    output {
-        File results = output_dir
     }
 }
 
@@ -134,8 +51,8 @@ task presto {
         printf "  %2d: %-*s $(date +'%H:%M %D')\n" $((++STEP)) 24 "AssemblePairs align"
 
         AssemblePairs.py align -1 ~{basenames[1]}_primers-pass_pair-pass.fastq -2 ~{basenames[0]}_primers-pass_pair-pass.fastq \
-          --coord ~{coordinates} --rc tail --2f CPRIMER VPRIMER ~{if(start_v>0) then "V_barcode" else ""}  \
-          --outname ~{name}  --outdir . --log AP.log --nproc ~{NPROC}
+        --coord ~{coordinates} --rc tail --2f CPRIMER VPRIMER ~{if(start_v>0) then "V_barcode" else ""}  \
+        --outname ~{name}  --outdir . --log AP.log --nproc ~{NPROC}
 
         ParseLog.py -l AP.log -f ID LENGTH OVERLAP ERROR PVALUE
 
