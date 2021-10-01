@@ -102,8 +102,8 @@ task analyze_diversity {
         File clone_counts_tsv = name + "_clone_counts.tsv"
         File coverages_tsv = name + "_coverages.tsv"
         File abundance_tsv = name + "_abundance_curve.tsv"
-        File abundance_chart = name + "_abundancy_curve.png"
+        File abundance_chart = name + "_abundancy_curve.svg"
         File diversity_tsv = name + "_diversity.tsv"
-        File diversity_chart = name + "_diversity.png"
+        File diversity_chart = name + "_diversity.svg"
     }
 }
