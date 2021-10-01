@@ -82,18 +82,25 @@ workflow cowan_airr {
         }
 
         call changeo.changeo_igblast as igblast {
-            input: fastq = presto.out, threads = threads, name = name, destination = destination
+            input: fastq = presto.out, threads = threads, name = name, destination = run_folder
         }
 
         call clonal.clonal_analysis as clonal_analysis {
             input:
-                airr_tsv = igblast.airr_tsv,
+                airr_tsv = igblast.airr_tsv_translated_functional,
                 destination = run_folder,
                 name = name,
                 threads = threads,
                 clones_bin_width = clones_bin_width,
                 max_memory_gb = max_memory_gb
         }
+
+    }
+
+    output {
+        Array[File] result_folders = run_folder
+        Array[File] clones = clonal_analysis.clones
+        Array[File] diversities =  clonal_analysis.diversity
 
     }
 }
