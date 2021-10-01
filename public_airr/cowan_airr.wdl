@@ -75,7 +75,7 @@ workflow cowan_airr {
         #        constant_length = constant_length
         #}
 
-        String run_folder = destination + "/" + name
+        String run_folder = run.folder
 
         call files.copy as copy_presto {
             input: destination = run_folder, files = [presto.results]
