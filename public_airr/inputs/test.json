@@ -1,9 +1,7 @@
 {
   "cowan_airr.title": "Cowan, experiment with SRR10014036",
   "cowan_airr.runs": ["SRR10014036"],
-  "cowan_airr.experiment_folder": "/data/samples/AIRR-Seq/RA",
-  "cowan_airr.C_primers": "/data/samples/AIRR-Seq/RA/PRJNA561156/primers/C_primers.fasta",
-  "cowan_airr.V_primers": "/data/samples/AIRR-Seq/RA/PRJNA561156/primers/V_primers.fasta",
+  "cowan_airr.destination": "/data/samples/AIRR-Seq/RA",
   "cowan_airr.original_names": false,
   "cowan_airr.coordinates": "sra"
 

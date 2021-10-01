@@ -37,7 +37,7 @@ workflow clonal_analysis {
     }
 
     call files.copy as copy_diversity {
-        input: destination = destination + "/clones" + "/diversity",
+        input: destination = destination + "/" + "clones" + "/" + "diversity",
             files = [
                     analyze_diversity.clone_counts_tsv,
                     analyze_diversity.coverages_tsv,
@@ -63,7 +63,9 @@ task analyze_clones {
         Float binwidth = 0.02
         Int threads
         Int max_memory
+        String method = "novj"
     }
+    String method_suffix = "_" + method + "_"
 
     command {
         clones.R analyze_clones --name ~{name} --suffix ~{suffix} --threads ~{threads} --binwidth ~{binwidth} ~{airr_tsv}
@@ -76,9 +78,9 @@ task analyze_clones {
     }
 
     output {
-        File out = name + suffix + ".tsv"
-        File histogram = name + suffix + ".png"
-        File vjl_groups = name+"_vjl_groups.tsv"
+        File out = name +"_"+ method + suffix + ".tsv"
+        File histogram = name + "_"+ method + suffix + ".svg"
+        File vjl_groups = name+ method_suffix + "groups" + ".tsv"
     }
 }
 

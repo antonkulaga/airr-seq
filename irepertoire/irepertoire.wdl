@@ -26,6 +26,9 @@ workflow irepertoire{
         Int min_dupcount = 2
         Float clones_bin_width = 0.02
         Int max_memory_gb = 96
+
+        #"cowan_airr.C_primers": "/data/samples/AIRR-Seq/RA/PRJNA561156/primers/C_primers.fasta",
+        #"cowan_airr.V_primers": "/data/samples/AIRR-Seq/RA/PRJNA561156/primers/V_primers.fasta",
     }
 
     call fastqc {
