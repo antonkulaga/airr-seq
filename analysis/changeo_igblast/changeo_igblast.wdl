@@ -102,12 +102,12 @@ task changeo {
         CreateGermlines.py -d ~{outdir}/~{name}_db-pass.tsv \
             --outdir ~{outdir} --format ~{format} \
             -r /usr/local/share/germlines/imgt/human/vdj/ \
-            --log "~{outdir}/germ.log"
+            --log "~{outdir}/~{name}_germ.log"
             -g full dmask
 
         ParseDb.py select -d "~{outdir}/~{name}_db-pass_germ-pass.tsv" -f productive -u T TRUE --outname ~{name}_f
-        ParseDb.py sort -d "~{outdir}/~{name}_db-pass_germ-pass.tsv" -o "~{outdir}/~{name}_germ.tsv" --descend -f duplicate_count
-        ParseDb.py sort -d "~{outdir}/~{name}_f_parse-select.tsv" -o "~{outdir}/~{name}_functional.tsv" --descend -f duplicate_count
+        ParseDb.py sort -d "~{outdir}/~{name}_db-pass_germ-pass.tsv" -o "~{outdir}/~{name}_germ.tsv" --num --descend -f duplicate_count
+        ParseDb.py sort -d "~{outdir}/~{name}_f_parse-select.tsv" -o "~{outdir}/~{name}_functional.tsv" --num --descend -f duplicate_count
     }
 
     runtime {
