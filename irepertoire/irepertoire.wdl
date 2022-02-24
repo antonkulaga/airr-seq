@@ -1,5 +1,9 @@
+## # Immune repertoire analysis 
+## This workflow performs end-to-end immune repertoire analysis from MiSeq 2x250 bp runs.
+
 version development
 
+# Imports tasks for files: copy, merge
 import "https://raw.githubusercontent.com/antonkulaga/bioworkflows/main/common/files.wdl" as files
 
 #production version
@@ -7,7 +11,7 @@ import "https://raw.githubusercontent.com/antonkulaga/airr-seq/main/analysis/cha
 import "https://raw.githubusercontent.com/antonkulaga/airr-seq/main/analysis/clonal_analysis/clonal_analysis.wdl" as clonal
 
 
-workflow irepertoire{
+workflow irepertoire {
 
     input {
         Array[File] reads
@@ -15,21 +19,42 @@ workflow irepertoire{
         String destination
         String name
 
-        String species = "human"
-
+        # String species = "human"
         String coordinates = "illumina" #sra
-        Int threads = 12
-        Int min_reads_per_ig = 2
+        # Int min_reads_per_ig = 2
         Int min_length = 196
         Int min_quality = 20
         Int start_v = 10
         Int min_dupcount = 2
         Float clones_bin_width = 0.02
+        Int threads = 12
         Int max_memory_gb = 96
 
         #"cowan_airr.C_primers": "/data/samples/AIRR-Seq/RA/PRJNA561156/primers/C_primers.fasta",
         #"cowan_airr.V_primers": "/data/samples/AIRR-Seq/RA/PRJNA561156/primers/V_primers.fasta",
     }
+
+    meta {
+        description: "End-to-end workflow for immune repertoire analysis"
+    }
+    
+    parameter_meta {
+        reads: "Paths 2-array to the paired fastq files",
+        destination: "Path to directory to store inputs, intermediary and output files"
+        name: "Analysis name, used throughout the workflow for file naming"
+        # species: "Not used"
+        coordinates: "See `presto` task"
+        # min_reads_per_ig: "Not used"
+        min_length: "See `presto` task"
+        min_quality: "See `presto` task"
+        start_v: "See `presto` task"
+        min_dupcount: "See `presto` dupcount"
+        clones_bin_width: "See `clonal.clonal_analysis` task"
+        threads: "Constraints resource consumption, can crash containers if insufficient resources."
+        max_memory_gb: "Constraints resource consumption, can crash containers if insufficient resources."
+    }
+
+
 
     call fastqc {
         input: output_dir = "fastqc_results", reads = reads
@@ -78,6 +103,15 @@ task fastqc {
         Array[File] reads
     }
 
+    meta {
+        description: "Perform quality control"
+    }
+
+    parameter_meta {
+        output_dir: "Path to results subdirectory with fastqc results"
+        reads: "Paths to the paired fastqc files"
+    }
+
     command {
         mkdir -p ~{output_dir}
         fastqc --outdir ~{output_dir} ~{reads[0]} ~{reads[1]}
@@ -93,6 +127,7 @@ task fastqc {
 }
 
 task presto {
+    
     input {
         String output_dir = "results"
         String name
@@ -110,6 +145,26 @@ task presto {
         Int min_length
         Int start_v = 0
         Int max_memory
+    }
+
+    meta {
+        description: "Preprocess the raw paired fastqc. Results include intermediary files, assembled and filtered reads."
+    }
+
+    parameter_meta {
+        output_dir: "Path to output directory"
+        name: "See `irepertoire` workflow"
+        reads: "See `irepertoire` workflow"
+        coordinates: "Format of sequence identified: https://presto.readthedocs.io/en/stable/tools/AssemblePairs.html?highlight=AssemblePairs#cmdoption-AssemblePairs.py-align-coord"
+        collapse_max_missing: "Maximum number of missing nts for collapsing: https://presto.readthedocs.io/en/stable/tools/CollapseSeq.html?highlight=CollapseSeq#cmdoption-CollapseSeq.py-n"
+        dupcount: "Threshold for separating sequences by counts: https://presto.readthedocs.io/en/stable/tools/SplitSeq.html#cmdoption-SplitSeq.py-group-num"
+        min_quality: "Quality score threshold."
+        const_length: "Length of constant region to remove and annotate during primer masking: https://presto.readthedocs.io/en/stable/tools/MaskPrimers.html#maskprimers-py-extract"
+        variable_length: "Similar to `constant_length`"
+        min_length: "Lower threshold for filtering sequences."
+        start_v: "Starting position of sequence region to extract: https://presto.readthedocs.io/en/stable/tools/MaskPrimers.html#cmdoption-MaskPrimers.py-extract-start"
+        # NPROC: ""
+        # max_memory: ""
     }
 
     Array[String] basenames = [basename(reads[0], ".fastq"),basename(reads[1],".fastq")]
