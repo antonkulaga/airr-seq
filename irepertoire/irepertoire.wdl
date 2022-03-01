@@ -70,7 +70,7 @@ workflow irepertoire {
             files = [fastqc.results]
     }
 
-    call presto {
+    call presto.presto as presto {
         input: 
             name = name, 
             output_dir = "presto",
