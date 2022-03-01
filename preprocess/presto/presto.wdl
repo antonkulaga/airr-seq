@@ -2,7 +2,7 @@ version development
 
 import "https://raw.githubusercontent.com/antonkulaga/bioworkflows/main/common/files.wdl" as files
 
-workflow presto{
+workflow presto {
 
     input {
         Array[File] reads
@@ -21,24 +21,33 @@ workflow presto{
         Int max_memory_gb = 96
     }
 
-    call presto {
-        input: name = name, output_dir = "presto",
-        reads = reads, NPROC = threads, min_quality = min_quality, min_length = min_length, start_v = start_v, dupcount = min_dupcount,
-        coordinates = coordinates, max_memory = max_memory_gb, IGHC_fasta = IGHC_fasta
+    call presto_task {
+        input: 
+            name = name, 
+            output_dir = "presto",
+            reads = reads, 
+            NPROC = threads, 
+            min_quality = min_quality, 
+            min_length = min_length, 
+            start_v = start_v, 
+            dupcount = min_dupcount,
+            coordinates = coordinates, 
+            max_memory = max_memory_gb, 
+            IGHC_fasta = IGHC_fasta
     }
 
-    call files.copy as copy_presto { 
-        input: destination = destination, files = [presto.results]
-    }
+    # call files.copy as copy_presto { 
+    #     input: destination = destination, files = [presto.results]
+    # }
 
     output {
-        File presto_results = copy_presto.out[0]
+        File results = copy_presto.out[0]
         File out = presto.out
     }
 
 }
 
-task presto {
+task presto_task {
     input {
         String output_dir = "results"
         String name
