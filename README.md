@@ -2,9 +2,9 @@
 
 Adaptive immune repertoire sequencing related code
 
-## TODOs
-- irepertoire.wdl: import presto task from `preprocess`
-- 
+## Important files
+- `irepertoire/irepertoire.wdl`: main workflow for immune repertoire sequencing analysis
+- ...
 
 ## Documentation
 
