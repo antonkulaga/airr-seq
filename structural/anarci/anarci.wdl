@@ -10,8 +10,8 @@ workflow anarci {
         String? sequence #either sequence or fasta
         String name
         Int threads
-        String restrict
-        Boolean assign_germline
+        String? restrict
+        Boolean assign_germline = false
         String destination
     }
 
@@ -38,7 +38,7 @@ task anarci {
         String? sequence #either sequence or fasta
         String name
         Int threads = 1
-        String restrict
+        String? restrict
         Boolean assign_germline = false
         String output_prefix = "anarci_results"
     }
@@ -50,7 +50,7 @@ task anarci {
         mkdir -p ~{output_dir}; cd ~{output_dir}
         ANARCI ~{"-i " +fasta} ~{"--sequence " +sequence} --outfile ~{name} --scheme ~{scheme} \
         --csv --outfile_hits ~{name}_hit.txt --ncpu ~{threads} \
-        ~{if(assign_germline) then "--assign_germline" else ""} -r ~{restrict}
+        ~{if(assign_germline) then "--assign_germline" else ""} ~{"-r" + restrict}
     }
 
     runtime {

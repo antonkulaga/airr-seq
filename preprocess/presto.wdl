@@ -29,7 +29,6 @@ workflow presto {
 
 }
 
-
 task presto {
     input {
         String output_dir = "results"

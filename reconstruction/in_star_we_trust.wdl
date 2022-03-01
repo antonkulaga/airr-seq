@@ -33,6 +33,7 @@ workflow in_star_we_trust {
             original_names = original_names,
             deep_folder_structure = deep_folder_structure
     }
+
     scatter(mapping in  star_align.mappings) {
         call trust_me.trust as trust {
             input:
@@ -41,6 +42,5 @@ workflow in_star_we_trust {
                 imgt_reference = imgt_reference,
                 destination = mapping.right + "/" + "reconstruction"
         }
-
     }
 }

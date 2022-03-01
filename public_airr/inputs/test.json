@@ -1,0 +1,8 @@
+{
+  "cowan_airr.title": "Cowan, experiment with SRR10014036",
+  "cowan_airr.runs": ["SRR10014036"],
+  "cowan_airr.destination": "/data/samples/AIRR-Seq/RA",
+  "cowan_airr.original_names": false,
+  "cowan_airr.coordinates": "sra"
+
+}

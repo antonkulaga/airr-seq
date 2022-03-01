@@ -1,0 +1,12 @@
+{
+  "anarci_airr.chains_restriction": "heavy",
+  "anarci_airr.name": "PBMC_heavy",
+  "anarci_airr.destination":  "/data/samples/AIRR-Seq/OURS/anarci_mother_of_order/patient_1_PBMC1_heavy_S3987Nr2",
+  "anarci_airr.threads": 12,
+  "anarci_airr.sequence_id_field": "sequence_id",
+  "anarci_airr.sequence_field": "Translation",
+  "anarci_airr.airr": "/data/samples/AIRR-Seq/OURS/S3987Nr2/S3987Nr2-PBMC1_heavy/clones/S3987Nr2-PBMC1_heavy_vj_with_clones.tsv",
+  "anarci_airr.meta_fields": ["duplicate_count","clone_id"],
+  "anarci_airr.assign_germline": true
+}
+
