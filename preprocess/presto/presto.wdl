@@ -41,7 +41,7 @@ workflow presto {
     # }
 
     output {
-        File results = presto_task.out[0]
+        File results = presto_task.results
         File out = presto_task.out
     }
 
