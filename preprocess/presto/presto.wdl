@@ -41,8 +41,8 @@ workflow presto {
     # }
 
     output {
-        File results = copy_presto.out[0]
-        File out = presto.out
+        File results = presto_task.out[0]
+        File out = presto_task.out
     }
 
 }
