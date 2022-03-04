@@ -96,8 +96,31 @@ for (i in 1:length(sample_names)) {
     sample_path = config$samples[[sample_name]]$sample_path
     clones_path = paste0(sample_path, "/clones")
     
+    if (sample_name %in% c("S3987Nr2-PBMC1_heavy", "S3987Nr2-PBMC1_light", "S3987Nr2-RAMOS_heavy", "S3987Nr2-RAMOS_light")) {
+        print(paste0("Sample in exclusion list, skipping ", sample_name))
+        next
+    }
+    
+    if (file.exists(paste0(clones_path, "/", sample_name, "_collapse_clones_with_selection_pressure.tsv"))) {
+        print(paste0("Found baseline table, skipping ", sample_name))
+        next
+    }
+
     print(paste0("Clonal analysis for: ", i, " - ", sample_name))
-    clonal_analysis(clones_path, sample_name)
+    
+    tryCatch(
+        {
+            clonal_analysis(clones_path, sample_name)            
+        }, 
+        error = function(cond) {
+            message(paste0("Encountered error (message below) for: ", sample_name))
+            message(cond)
+        },
+        warning = function(cond) {
+            message(paste0("Encountered warning (message below) for: ", sample_name))
+            message(cond)
+        })
+    
     print("\n")
 }
 
