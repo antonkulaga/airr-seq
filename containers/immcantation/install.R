@@ -5,7 +5,8 @@ to_install <- c(
   "tidyverse", # The tidyverse is an opinionated collection of R packages designed for data science.
   "plotly", #charts
   "docopt", #for CLI
-  "magick" # for image processing
+  "magick", # for image processing
+  "immunarch"
 )
 install.packages(to_install, dependencies = TRUE)
 

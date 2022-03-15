@@ -1,7 +1,7 @@
 version development
 import "https://raw.githubusercontent.com/antonkulaga/bioworkflows/main/common/files.wdl" as files
 
-import "https://raw.githubusercontent.com/antonkulaga/airr-seq/main/structural/anarci/anarci.wdl" as mother_of_order
+import "https://raw.githubusercontent.com/antonkulaga/airr-seq/main/structural/anarci/anarci.wdl" as anarci
 
 workflow anarci_airr {
     input {
@@ -29,7 +29,7 @@ workflow anarci_airr {
 
     File created_fasta = copy_fasta.out[0] + "/" + basename(airr, ".tsv") + "_sequences.fasta"
 
-    call mother_of_order.anarci as anarci{
+    call anarci.anarci as anarci{
         input: destination = destination, fasta = created_fasta,
             species = species, scheme = scheme,
            name = name, threads = threads,
